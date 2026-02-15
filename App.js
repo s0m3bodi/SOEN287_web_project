@@ -56,7 +56,7 @@ function LoginPage  () { //defines a component that does something
   return (
     <div className="login-page"> 
       <h2>Login to your Smart Course Companion</h2>
-      <h3>{isEmployee ? 'Employees Login' : 'Student Login'}</h3>
+      <h3>{isEmployee ? "Employee's Login" : "Student's Login"}</h3>
       <div className="employee-Toggle">
         <label className="switch">
           <input
@@ -64,12 +64,14 @@ function LoginPage  () { //defines a component that does something
           checked={isEmployee}
           onChange={() => setIsEmployee(!isEmployee)}
         />
-        <span className="slider"></span>
+        <span className="slider">Employee Employee</span>
+       
+       
         </label>
-        <span>Employee</span>
+       
       </div>
 
-      <div className = "Fill1"> //box for username
+      <div className = "Fill1"> {/*box for username */}
         <input
           type="text"
           placeholder="Username"
@@ -77,7 +79,7 @@ function LoginPage  () { //defines a component that does something
           onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-          <div className = "Fill2"> //box for password
+          <div className = "Fill2"> {/*box for password*/}
         <input
           type="password"
           placeholder="Password"
@@ -85,11 +87,12 @@ function LoginPage  () { //defines a component that does something
           onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        {error && <p className="error">{error}</p>}//prints error message if needed\
-        <button onClick={checkLogin}>Login</button> //Login button calls check
+        {error && <p className="error">{error}</p>}{/*prints error message if needed*/}
+        <button className = "loginButton" onClick={checkLogin}>Login</button> {/*Login button calls check*/}
         </div>
 
   );
   }
 
   export default LoginPage;
+
