@@ -9,7 +9,7 @@ function App(){
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage/>}/>
-        <Route path="/student" element={<StudentPage/>}/>
+        <Route path="/student/*" element={<StudentPage/>}/>
         <Route path="/teacher" element={<TeacherPage/>}/>
       </Routes>
     </Router>

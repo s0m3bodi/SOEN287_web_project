@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../LoginPage.css';
+import '../pagesCSS/LoginPage.css';
 
 function LoginPage () { //defines a component that does something
   const [username, setUsername] = useState(''); //useState creates "states"

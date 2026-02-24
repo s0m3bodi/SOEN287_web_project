@@ -1,0 +1,11 @@
+
+
+.student-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.student-content {
+  flex: 1;
+  padding: 20px;
+}

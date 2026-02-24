@@ -1,5 +1,7 @@
 import React from "react";
 
+import '../pagesCSS/TeacherPage.css';
+
 function TeacherPage(){
     return(
         <div>
