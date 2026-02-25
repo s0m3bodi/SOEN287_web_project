@@ -6,9 +6,9 @@ import LoginPage from "./pages/LoginPage";
 import CourseManagementPage from "./pages/CourseManagementPage";
 import { courses as hardcodedCourses } from "./components/Data";
 function App(){
-    const [courses, setCourses] = useState(hardcodedCourses);
+    const [courses, setCourses] = useState(hardcodedCourses); //initiates the array with the data stored in Data.js needs to be here so updates work
 
-    const updateCourse = (updatedCourse) => {
+    const updateCourse = (updatedCourse) => { //function to update courses
         setCourses(prevCourses => {
           const existingCourse = prevCourses.find(course => course.id === updatedCourse.id);
            if (existingCourse) {
@@ -24,9 +24,9 @@ function App(){
     };
 
   
-
-  return(
+{/*needs to have both courses and onUpdateCourses to work since it has hardcoded and not valuers*/}
     
+  return(
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage/>}/>
