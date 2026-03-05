@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import '../pagesCSS/TeacherSidebar.css'
 //supposed to be the same look as student sidebar to be pretty can change it if you want
 const TeacherSidebar = ({ courses, onAddCourse }) => { //courses are the hardcoded ones //onAddCourse is for the new ones
     return (
