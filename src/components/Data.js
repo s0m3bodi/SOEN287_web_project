@@ -41,4 +41,20 @@ export const courses = [ //just the hardcoded course
             {type: 'Final', weight: 50, completed: 0},
         ],
     },
+    {
+        id: 4,
+        code: 'COMP 248',
+        name: 'Object-oriented programming I',
+        term: 'Fall 2025',
+        isActive: true,
+        totalStudents: 171,
+        assessments: [
+            {type: 'Assignment 1', weight: 2, completed: 152},
+            {type: 'Assignment 2', weight: 3, completed: 160},
+            {type: 'Assignment 3', weight: 5, completed: 155},
+            {type: 'Assignment 4', weight: 10, completed: 146},
+            {type: 'Midterm', weight: 20, completed: 169},
+            {type: 'Final', weight: 60, completed: 170},
+        ],
+    },
 ];
