@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom"; 
 import TeacherSidebar from "../components/TeacherSidebar";
+import '../pagesCSS/TeacherPage.css'
 
 //the on update is important so when something is changed it also shows on the homepage and side bar
 
@@ -36,38 +37,41 @@ const addCourse = () => { //adds new course to array
 
 
 return (
-    <div style={{ display: "flex" }}> {/*anything on style can be moved to future css file*/}
+    <div style={{ display: "flex", minHeight: "100vh" }}> {/*anything on style can be moved to future css file*/}
         <TeacherSidebar courses={courses} onAddCourse={() => setShowAddModal(true)} /> {/*courses={course} prints the array and onAddCourse={( ... makes the menu for adding a course show by setting it active*/}
       <main style={{ padding: "10px", flex: 1 }}> {/* the filter goes though the array to only print the active ones on the main page*/}
        {courses.filter(course => course.isActive).map(course => ( 
-                    <div key={course.id}> 
+                    <div key={course.id} className="course"> 
                         <h2>{course.name}</h2> {/*prints the name can be changed to also have code and session*/}
-                        <h3>Assessments</h3> {/*print assessments with the completion percent*/}
-                       {/*checks if there is any assessments creates a list of them if yes*/}
-                        {course.assessments.length > 0 ? (  
-                            <ul> 
-                                {/* checks if the assessment is completed and there are students enrolled then computes percentage formated 2 decimal places*/}
-                                {course.assessments.map((assessment, index) => {
-                                   const completionPercentage = assessment.completed && course.totalStudents > 0 
-                                        ? ((assessment.completed / course.totalStudents) * 100).toFixed(2)
-                                        : 0;
-                                        {/*return the list of assignment with the type and percentage*/}
-                                    return ( 
-                                        <li key={index}>
-                                            {assessment.type}: {completionPercentage}% of students completed ({assessment.completed}/{course.totalStudents} students)
-                                        </li>
-                                    );
-                                })} 
-                              
-                            </ul>
-                        ) : (
-                            <p>No assessments available.</p> 
-                        )} {/* if no assignments*/}
+                        
+                        <div className='coursecontent'>
+                            <h3>Assessments</h3> {/*print assessments with the completion percent*/}
+                        {/*checks if there is any assessments creates a list of them if yes*/}
+                            {course.assessments.length > 0 ? (  
+                                <ul> 
+                                    {/* checks if the assessment is completed and there are students enrolled then computes percentage formated 2 decimal places*/}
+                                    {course.assessments.map((assessment, index) => {
+                                    const completionPercentage = assessment.completed && course.totalStudents > 0 
+                                            ? ((assessment.completed / course.totalStudents) * 100).toFixed(2)
+                                            : 0;
+                                            {/*return the list of assignment with the type and percentage*/}
+                                        return ( 
+                                            <li key={index}>
+                                                {assessment.type}: {completionPercentage}% of students completed ({assessment.completed}/{course.totalStudents} students)
+                                            </li>
+                                        );
+                                    })} 
+                                
+                                </ul>
+                            ) : (
+                                <p>No assessments available.</p> 
+                            )} {/* if no assignments*/}
 
 
-                        <button onClick={() => toggleActive(course.id)}> {/* button for actice status*/}
-                            Mark as {course.isActive ? "Inactive" : "Active"}
-                        </button>
+                            <button onClick={() => toggleActive(course.id)}> {/* button for actice status*/}
+                                Mark as {course.isActive ? "Inactive" : "Active"}
+                            </button>
+                        </div>
                     </div>
                 ))}
                  {/*menu for new course add */}

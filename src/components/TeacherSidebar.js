@@ -4,15 +4,7 @@ import '../pagesCSS/TeacherSidebar.css'
 //supposed to be the same look as student sidebar to be pretty can change it if you want
 const TeacherSidebar = ({ courses, onAddCourse }) => { //courses are the hardcoded ones //onAddCourse is for the new ones
     return (
-        <div className="sidebar" style={{ //style copied from the student one so they are cohesive can change
-            width: "250px",
-            height: "100vh",
-            backgroundColor: "#590016",
-            color: "white",
-            padding: "20px",
-            marginRight:"30px"
-        
-        }}>
+        <div className="sidebar">
         <h2>Courses</h2> {/*just what apeears on top of sidebar */}
         <Link to="/teacher"> {/* this is the home button that links to the home page can change to not be a button but dont change link */}
          <button>Home</button> {/*whats written on the button*/}
