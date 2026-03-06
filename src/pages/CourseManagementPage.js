@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import '../pagesCSS/CourseManagement.css'
 //this page opens when click on a course in the side bar, it has a place to edit info and to add assessments
 
-const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which array 
+const CourseManagementPage = ({ courses, onUpdateCourse, onDeleteCourse }) => { //says which array 
     const { id } = useParams(); //this grabs the ids used on key to know which course was clicked on
     const navigate = useNavigate(); //to go to another page
     const hardcodedCourses = courses.find(course => course.id === parseInt(id)) || {}; //goes through the array to find the course matching the id if no courses uses default
@@ -42,7 +42,6 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
     const handleSaveChanges = () => { //saves changes and goes back to teacher homepage
         onUpdateCourse(courseData);
         setIsEditing(false);
-        navigate("/teacher");
     };
 
 
@@ -130,8 +129,19 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
                     </div>
                 ))}
                 <button onClick={addAssignment} disabled={!isEditing}>Add Assessment</button> {/*button to add an assignment*/}
+                
             </div>
             <div className="end-buttons">
+                {/*Button to delete course, asks for confirmation */}
+                <button onClick={() => {
+                    if (window.confirm(`Delete course "${courseData.name}"?`)){
+                        onDeleteCourse(courseData.id);
+                        navigate("/teacher");
+                    }
+                }}>
+                    Delete Course
+                </button>
+                
                 {/*button to save changes needs to be here doesnt work otherwise*/}
                 {isEditing && ( /*only shows the save button if editing is true*/
                     <button onClick={handleSaveChanges}>Save Changes</button> 

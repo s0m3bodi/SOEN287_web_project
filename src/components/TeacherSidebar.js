@@ -1,6 +1,5 @@
-import { Link, useNavigate, userNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import '../pagesCSS/TeacherSidebar.css'
-import { courses } from "./Data";
 
 const TeacherSidebar = ({courses, onAddCourse}) => {//courses are the hardcoded ones, onAddCourse is for the new ones
     const navigate = useNavigate();

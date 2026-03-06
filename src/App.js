@@ -23,6 +23,10 @@ function App(){
         });    
     };
 
+    const deleteCourse = (courseId) => {
+      setCourses(prevCourses => prevCourses.filter(course => course.id !== courseId));
+    };
+
   
 {/*needs to have both courses and onUpdateCourses to work since it has hardcoded and not valuers*/}
     
@@ -31,8 +35,20 @@ function App(){
       <Routes>
         <Route path="/" element={<LoginPage/>}/>
         <Route path="/student/*" element={<StudentProfile/>}/>
-        <Route path="/teacher" element={<TeacherPage courses={courses} onUpdateCourse={updateCourse}/>}/>
-        <Route path="/course/:id" element={<CourseManagementPage courses={courses} onUpdateCourse={updateCourse} />} />
+        <Route 
+          path="/teacher"
+          element={<TeacherPage courses={courses} onUpdateCourse={updateCourse}/>}
+        />
+        <Route 
+          path="/course/:id" 
+          element={
+            <CourseManagementPage 
+              courses={courses} 
+              onUpdateCourse={updateCourse}
+              onDeleteCourse={deleteCourse} 
+            />
+          } 
+        />
       </Routes>
     </Router>
   );
