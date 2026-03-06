@@ -1,6 +1,6 @@
 import { Routes, Route} from 'react-router-dom';
-import MainStudentSideBar from '../StudentPage/MainStudentSideBar';
-import defaultPP from "../StudentPage/defaultPP.jpeg"
+import MainStudentSideBar from '../components/MainStudentSideBar';
+import defaultPP from "../pages/defaultPP.jpeg"
 import '../StudentCSS/StudentProfile.css';
 import { useState } from 'react';
 
