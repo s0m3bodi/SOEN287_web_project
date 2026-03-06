@@ -40,7 +40,7 @@ function Dashboard() {
 
   return (
     <div className="details-section">
-      <h2>Dashboard</h2>
+      <h2>Hi 👋</h2>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div style={sectionStyle}>
