@@ -34,7 +34,6 @@ function Profile(){
     );
 }
 function Assesments(){
-    function Assessments() {
   const [assessments, setAssessments] = useState([
     {
       id: 1,
@@ -142,12 +141,8 @@ function Assesments(){
     </div>
   );
 }
-}
-function Grades(){
 
-}
 function Progress(){
-    function Progress() {
   const courses = [
     { name: "SOEN 287", average: 82 },
     { name: "COMP 248", average: 74 }
@@ -175,7 +170,7 @@ function Progress(){
     </div>
   );
 }
-}
+
 
 function StudentProfile(){
 
