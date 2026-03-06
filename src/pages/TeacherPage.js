@@ -78,9 +78,17 @@ return (
                 {showAddModal && (
                     <div className="addMenu">
                         <h2>Add New Course</h2>
-                        <input className="boxforcode" name="code" value={newCourse.code} onChange={handleInputChange} placeholder="Course Code e.g. SOEN 287" />
-                        <input  className="boxforname" name="name" value={newCourse.name} onChange={handleInputChange} placeholder="Course Name" />
-                        <input className="boxforterm" name="term" value={newCourse.term} onChange={handleInputChange} placeholder="Term" />
+                        <div className="new-courseinfo">
+                            <label>Enter course code:
+                            <input className="boxforcode" name="code" value={newCourse.code} onChange={handleInputChange} placeholder="Course Code e.g. SOEN 287" />
+                            </label>
+                            <label>Enter course name:
+                            <input  className="boxforname" name="name" value={newCourse.name} onChange={handleInputChange} placeholder="Course Name" />
+                            </label>
+                            <label>Enter course term:
+                            <input className="boxforterm" name="term" value={newCourse.term} onChange={handleInputChange} placeholder="Term" />
+                            </label>
+                        </div>
                         <button onClick={addCourse}>Add Course</button>  {/*button at the end to confirm*/}
                         <button onClick={() => setShowAddModal(false)}>Cancel</button>  {/*in case give up on adding*/}
                     </div>

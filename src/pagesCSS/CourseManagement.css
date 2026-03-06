@@ -21,11 +21,11 @@
     border: 1px solid lightgrey;
     border-radius: 2px;
     padding: 5px;
+    caret-color: #590016
 }
 .course-info input:focus {
     border: 1.5px solid #870626;
     outline: none;
-    caret-color: #590016
 }
 .course-info button {
     background-color:#590016;
