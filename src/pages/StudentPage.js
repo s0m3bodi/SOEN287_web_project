@@ -1,4 +1,4 @@
-import { Routes, Route} from 'react-router-dom';
+import { Routes, Route, useNavigate} from 'react-router-dom';
 import StudentSidebar from '../components/StudentSidebar';
 
 import '../pagesCSS/StudentPage.css';
