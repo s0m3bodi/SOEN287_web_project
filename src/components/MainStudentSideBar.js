@@ -27,6 +27,7 @@ function MainStudentSideBar() {
                 <nav>
                     <p><Link to="/student" style={{color: "white"}}>Dashboard</Link></p>
                     <p><Link to="/student/profile" style={{color: "white"}}>Profile</Link></p>
+                    <p><Link to="/student/courses" style={{color: "white"}}>Courses</Link></p>
                     <p><Link to="/student/assessments" style={{color: "white"}}>Assessments</Link></p>
                     <p><Link to="/student/progress" style={{color: "white"}}>Progress</Link></p>
                     <p><Link to="/student/calendar" style={{color: "white"}}>Calendar</Link></p>
