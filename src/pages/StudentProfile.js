@@ -8,14 +8,14 @@ function Dashboard() {
   const courses = [
     { id: 1, name: "SOEN 287", average: 82 },
     { id: 2, name: "COMP 249", average: 74 },
-    { id: 2, name: "SOEN 228", average: 84 },
-    { id: 2, name: "COMP 232", average: 98 }
+    { id: 3, name: "SOEN 228", average: 84 },
+    { id: 4, name: "COMP 232", average: 98 }
   ];
 
   const upcoming = [
     { id: 1, title: "Assignment 2", course: "SOEN 287", due: "March 10" },
     { id: 2, title: "Quiz 3", course: "COMP 248", due: "March 12" },
-    { id: 2, title: "Lab Report", course: "SOEN 228", due: "March 17" }
+    { id: 3, title: "Lab Report", course: "SOEN 228", due: "March 17" }
   ];
 
   const overall =
@@ -250,7 +250,9 @@ function Assessments() {
 function Progress() {
   const courses = [
     { name: "SOEN 287", average: 82 },
-    { name: "COMP 248", average: 74 }
+    { name: "COMP 249", average: 74 },
+    { name: "SOEN 228", average: 84 },
+    { name: "COMP 232", average: 98 }
   ];
 
   return (
