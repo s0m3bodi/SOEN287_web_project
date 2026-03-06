@@ -128,7 +128,7 @@ form button {
 }
 
 form button:hover {
-  background-color: #7a0020;
+  background-color: #590016;
 }
 
 /* Course card styling */
@@ -154,7 +154,7 @@ form button:hover {
 /* Delete button */
 .course-card button {
   margin-top: 8px;
-  background-color: #c0392b;
+  background-color: #590016;
   color: white;
   border: none;
   padding: 6px 10px;
@@ -163,5 +163,5 @@ form button:hover {
 }
 
 .course-card button:hover {
-  background-color: #e74c3c;
+  background-color: #590016;
 }
