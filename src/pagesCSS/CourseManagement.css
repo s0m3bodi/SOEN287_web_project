@@ -1,0 +1,74 @@
+.course-manager h1 {
+    background-color: #590016;
+    color: white;
+    margin: 0;
+    padding: 10px 15px;
+}
+.course-info {
+    margin: 5px 15px;
+}
+.course-info h2 {
+    margin-bottom: 15px
+}
+.course-info label {
+    display: block;
+    margin-right: 10px;
+    margin-top: 0px;
+}
+.course-info input {
+    margin-left: 5px;
+    margin-bottom: 5px;
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    padding: 5px;
+}
+.course-info input:focus {
+    border: 1.5px solid #870626;
+    outline: none;
+    caret-color: #590016
+}
+.course-info button {
+    background-color:#590016;
+    color: white;
+    margin-left: -1px;
+    padding: 10px 10px;
+    border: 2px solid;
+    border-radius: 7px;
+    cursor: pointer;
+}
+.course-info p {
+    margin: 15px 0px 5px;
+}
+.assignments {
+    margin: 5px 15px
+}
+.assignments input {
+    margin-right: 10px;
+    margin-bottom: 5px;
+    border: 1px solid lightgray;
+    border-radius: 2px;
+    padding: 3px;
+}
+.assignments input:focus {
+    outline: none;
+    border: 2px solid #870626;
+}
+.assignments button {
+    background-color:white;
+    color: #870626;
+    margin-left: -1px;
+    padding: 5px 10px;
+    border: 2px solid;
+    border-radius: 7px;
+    cursor: pointer;
+}
+.end-buttons button {
+    background-color:#590016;
+    color: white;
+    margin-left: 12px;
+    padding: 10px 10px;
+    border: 2px solid;
+    border-radius: 7px;
+    cursor: pointer;
+}
+

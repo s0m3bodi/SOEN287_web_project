@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import '../pagesCSS/CourseManagement.css'
 //this page opens when click on a course in the side bar, it has a place to edit info and to add assessments
 
 const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which array 
@@ -44,44 +45,47 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
 
 
     return (
-        <div> {/*print a header with the course name and boxes with the current info that can be edited*/}
+        <div className="course-manager"> {/*print a header with the course name and boxes with the current info that can be edited*/}
             <h1>Manage Course: {courseData.name}</h1>
-            <div>
+            <div className="course-info">
                 <h2>Course Info</h2>
-                <label>
-                    Name: 
-                    <input
-                        className="boxForName"
-                        name="name"
-                        value={courseData.name}
-                        onChange={handleInputChange}
-                    />
-                </label>
-                <label>
-                    Code: 
-                    <input
-                        className="boxForCode" 
-                        name="code" 
-                        value={courseData.code} 
+                <div className="course-info-components">
+                    <label>
+                        Name: 
+                        <input
+                            className="boxForName"
+                            name="name"
+                            value={courseData.name}
+                            onChange={handleInputChange}
+                        />
+                    </label>
+                    <label>
+                        Code: 
+                        <input
+                            className="boxForCode" 
+                            name="code" 
+                            value={courseData.code} 
+                            onChange={handleInputChange} 
+                        />
+                    </label>
+                    <label>
+                        Term: 
+                        <input 
+                        className="boxForTerm"
+                        name="term" 
+                        value={courseData.term} 
                         onChange={handleInputChange} 
-                    />
-                </label>
-                <label>
-                    Term: 
-                    <input 
-                    className="boxForTerm"
-                    name="term" 
-                    value={courseData.term} 
-                    onChange={handleInputChange} 
-                    />
-                </label>
+                        />
+                    </label>
+                </div>
+                <p>Status: {courseData.isActive ? "Active" : "Inactive"}</p> {/*shows current status*/}
                 <button onClick={toggleActive}> {/*button for active inactive*/}
                     Mark as {courseData.isActive ? "Inactive" : "Active"} {/*will show opposite of current state*/}
                 </button>
-                <p>Status: {courseData.isActive ? "Active" : "Inactive"}</p> {/*shows current status*/}
+                
             </div>
             
-            <div>
+            <div className="assignments">
                 <h2>Assignments</h2> {/*prints assessments as boxes that can be edited*/}
                 {courseData.assessments.map((assessment, index) => (
                     <div key={index}>
@@ -114,8 +118,10 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
                 ))}
                 <button onClick={addAssignment}>Add Assignment</button> {/*button to add an assignment*/}
             </div>
-             <button onClick={handleSaveChanges}>Save Changes</button> {/*button to save changes needs to be here doesnt work otherwise*/}
-            <button onClick={() => navigate("/teacher")}>Back to Home</button> {/*goes back to teacher home page */}
+            <div className="end-buttons">
+                <button onClick={handleSaveChanges}>Save Changes</button> {/*button to save changes needs to be here doesnt work otherwise*/}
+                <button onClick={() => navigate("/teacher")}>Back to Home</button> {/*goes back to teacher home page */}
+            </div>
         </div>
     );
 };
