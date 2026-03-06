@@ -86,7 +86,7 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
             </div>
             
             <div className="assignments">
-                <h2>Assignments</h2> {/*prints assessments as boxes that can be edited*/}
+                <h2>Assessments</h2> {/*prints assessments as boxes that can be edited*/}
                 {courseData.assessments.map((assessment, index) => (
                     <div key={index}>
                         <input 
@@ -116,7 +116,7 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
                         />
                     </div>
                 ))}
-                <button onClick={addAssignment}>Add Assignment</button> {/*button to add an assignment*/}
+                <button onClick={addAssignment}>Add Assessment</button> {/*button to add an assignment*/}
             </div>
             <div className="end-buttons">
                 <button onClick={handleSaveChanges}>Save Changes</button> {/*button to save changes needs to be here doesnt work otherwise*/}
@@ -125,5 +125,6 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
         </div>
     );
 };
+
 
 export default CourseManagementPage;
