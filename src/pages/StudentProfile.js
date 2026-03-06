@@ -40,7 +40,7 @@ function Dashboard() {
 
   return (
     <div className="details-section">
-      <h2>Dashboard</h2>
+      <h2>Hi 👋</h2>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div style={sectionStyle}>
@@ -120,6 +120,119 @@ function Profile() {
     </div>
   );
 }
+function Courses(){ 
+   const [courses, setCourses] = useState([
+    {
+      code: "SOEN 287",
+      name: "Web Programming",
+      instructor: "Dr. Smith",
+      term: "Winter 2026"
+    },
+    {
+      code: "COMP 248",
+      name: "Object-Oriented Programming I",
+      instructor: "Dr. Lee",
+      term: "Winter 2026"
+    },
+    {
+      code: "MATH 205",
+      name: "Elementary Calculus I",
+      instructor: "Dr. Brown",
+      term: "Winter 2026"
+    }
+  ]);
+
+  const [form, setForm] = useState({
+    code: "",
+    name: "",
+    instructor: "",
+    term: ""
+  });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const addCourse = (e) => {
+    e.preventDefault();
+
+    if (!form.code || !form.name) {
+      alert("Course code and name required");
+      return;
+    }
+
+    setCourses([...courses, form]);
+
+    setForm({
+      code: "",
+      name: "",
+      instructor: "",
+      term: ""
+    });
+  };
+
+  const deleteCourse = (index) => {
+    setCourses(courses.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="details-section">
+
+      <h2>My Courses</h2>
+
+      <form onSubmit={addCourse}>
+        <input
+          name="code"
+          placeholder="Course Code"
+          value={form.code}
+          onChange={handleChange}
+        />
+
+        <input
+          name="name"
+          placeholder="Course Name"
+          value={form.name}
+          onChange={handleChange}
+        />
+
+        <input
+          name="instructor"
+          placeholder="Instructor"
+          value={form.instructor}
+          onChange={handleChange}
+        />
+
+        <input
+          name="term"
+          placeholder="Term"
+          value={form.term}
+          onChange={handleChange}
+        />
+
+        <button>Add Course</button>
+      </form>
+
+      {courses.map((c, index) => (
+        <div key={index} className="course-card">
+          <h3>{c.code}</h3>
+          <p>{c.name}</p>
+          <p>{c.instructor}</p>
+          <p>{c.term}</p>
+
+          <button onClick={() => deleteCourse(index)}>
+            Delete
+          </button>
+        </div>
+      ))}
+
+    </div>
+  );
+}
+
+
 
 function Assessments() {
   const [assessments, setAssessments] = useState([
@@ -318,6 +431,7 @@ function StudentProfile() {
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="courses" element={<Courses />} />        
           <Route path="assessments" element={<Assessments />} />
           <Route path="progress" element={<Progress />} />
           <Route path="calendar" element={<Calendar />} />

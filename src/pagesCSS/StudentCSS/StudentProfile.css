@@ -92,6 +92,7 @@
     border-radius: 50%;         /* Makes it circular */
     object-fit: cover;
     margin-bottom: 15px;
+    border: 3px solid #590016;
 }
 
 .profile-section p {
@@ -102,4 +103,66 @@
 .details-section p {
     margin-bottom: 15px;
     font-size: 16px;
+}
+/* Form styling */
+form {
+  margin-bottom: 30px;
+}
+
+form input {
+  display: block;
+  width: 250px;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Add course button */
+form button {
+  background-color: #590016;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #590016;
+}
+
+/* Course card styling */
+.course-card {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
+  width: 300px;
+}
+
+/* Course title */
+.course-card h3 {
+  margin-bottom: 5px;
+}
+
+/* Course text */
+.course-card p {
+  margin: 4px 0;
+}
+
+/* Delete button */
+.course-card button {
+  margin-top: 8px;
+  background-color: #590016;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.course-card button:hover {
+  background-color: #590016;
 }
