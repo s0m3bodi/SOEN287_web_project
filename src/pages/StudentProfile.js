@@ -125,19 +125,19 @@ function Courses(){
     {
       code: "SOEN 287",
       name: "Web Programming",
-      instructor: "Dr. Smith",
+      instructor: "Ulrich Smith",
       term: "Winter 2026"
     },
     {
-      code: "COMP 248",
-      name: "Object-Oriented Programming I",
-      instructor: "Dr. Lee",
+      code: "COMP 249",
+      name: "Object-Oriented Programming II",
+      instructor: "Lee Chang",
       term: "Winter 2026"
     },
     {
       code: "MATH 205",
-      name: "Elementary Calculus I",
-      instructor: "Dr. Brown",
+      name: "Differential and Integral Calculus II",
+      instructor: "Brown Patel",
       term: "Winter 2026"
     }
   ]);
