@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import StudentPage from "./pages/StudentPage";
+import StudentProfile from "./pages/StudentProfile";
 import TeacherPage from "./pages/TeacherPage";
 import LoginPage from "./pages/LoginPage";
 import CourseManagementPage from "./pages/CourseManagementPage";
@@ -30,7 +30,7 @@ function App(){
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage/>}/>
-        <Route path="/student/*" element={<StudentPage/>}/>
+        <Route path="/student/*" element={<StudentProfile/>}/>
         <Route path="/teacher" element={<TeacherPage courses={courses} onUpdateCourse={updateCourse}/>}/>
         <Route path="/course/:id" element={<CourseManagementPage courses={courses} onUpdateCourse={updateCourse} />} />
       </Routes>
