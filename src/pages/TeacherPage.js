@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom"; 
+import { useState } from 'react';
 import TeacherSidebar from "../components/TeacherSidebar";
 import '../pagesCSS/TeacherPage.css'
 
@@ -10,7 +9,6 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
    
     const [newCourse, setNewCourse] = useState({ code: '', name: '', term: '', assessments: [] }); //new courses
     const [showAddModal, setShowAddModal] = useState(false); //shows a menu when click on addcourse to add a course
-    const navigate = useNavigate(); 
     
 
     const handleInputChange = (e) => { //handles the input for new courses (like set in java)

@@ -9,6 +9,7 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
     const hardcodedCourses = courses.find(course => course.id === parseInt(id)) || {}; //goes through the array to find the course matching the id if no courses uses default
     
     const [courseData, setCourseData] = useState(hardcodedCourses);  //honestly don't know had to search it up doesnt work without it
+    const [isEditing, setIsEditing] = useState(false);
 
     const handleInputChange = (e) => { //same as last time it handles the input 
         const { name, value } = e.target;
@@ -40,6 +41,7 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
 
     const handleSaveChanges = () => { //saves changes and goes back to teacher homepage
         onUpdateCourse(courseData);
+        setIsEditing(false);
         navigate("/teacher");
     };
 
@@ -47,6 +49,11 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
     return (
         <div className="course-manager"> {/*print a header with the course name and boxes with the current info that can be edited*/}
             <h1>Manage Course: {courseData.name}</h1>
+            <div>
+                <button className="edit" onClick={() => setIsEditing(true)}>
+                    Edit
+                </button>
+            </div>
             <div className="course-info">
                 <h2>Course Info</h2>
                 <div className="course-info-components">
@@ -57,6 +64,7 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
                             name="name"
                             value={courseData.name}
                             onChange={handleInputChange}
+                            disabled={!isEditing}
                         />
                     </label>
                     <label>
@@ -66,20 +74,22 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
                             name="code" 
                             value={courseData.code} 
                             onChange={handleInputChange} 
+                            disabled={!isEditing}
                         />
                     </label>
                     <label>
                         Term: 
                         <input 
-                        className="boxForTerm"
-                        name="term" 
-                        value={courseData.term} 
-                        onChange={handleInputChange} 
+                            className="boxForTerm"
+                            name="term" 
+                            value={courseData.term} 
+                            onChange={handleInputChange} 
+                            disabled={!isEditing}
                         />
                     </label>
                 </div>
                 <p>Status: {courseData.isActive ? "Active" : "Inactive"}</p> {/*shows current status*/}
-                <button onClick={toggleActive}> {/*button for active inactive*/}
+                <button onClick={toggleActive} disabled={!isEditing}> {/*button for active inactive*/}
                     Mark as {courseData.isActive ? "Inactive" : "Active"} {/*will show opposite of current state*/}
                 </button>
                 
@@ -95,6 +105,7 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
                             placeholder="Type" 
                             value={assessment.type} 
                             onChange={(e) => handleAssignmentChange(index, e)} 
+                            disabled={!isEditing}
                         />
                        {/*want to change type to a better one so doesnt go one by one same for completed*/}
                         <input 
@@ -104,6 +115,7 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
                             placeholder="Weight" 
                             value={assessment.weight} 
                             onChange={(e) => handleAssignmentChange(index, e)} 
+                            disabled={!isEditing}
                         />
                         {/*want to change in the future so its automatic*/}
                         <input 
@@ -113,13 +125,17 @@ const CourseManagementPage = ({ courses, onUpdateCourse }) => { //says which arr
                             placeholder="Completed" 
                             value={assessment.completed} 
                             onChange={(e) => handleAssignmentChange(index, e)} 
+                            disabled={!isEditing}
                         />
                     </div>
                 ))}
-                <button onClick={addAssignment}>Add Assignment</button> {/*button to add an assignment*/}
+                <button onClick={addAssignment} disabled={!isEditing}>Add Assignment</button> {/*button to add an assignment*/}
             </div>
             <div className="end-buttons">
-                <button onClick={handleSaveChanges}>Save Changes</button> {/*button to save changes needs to be here doesnt work otherwise*/}
+                {/*button to save changes needs to be here doesnt work otherwise*/}
+                {isEditing && ( /*only shows the save button if editing is true*/
+                    <button onClick={handleSaveChanges}>Save Changes</button> 
+                )}
                 <button onClick={() => navigate("/teacher")}>Back to Home</button> {/*goes back to teacher home page */}
             </div>
         </div>
