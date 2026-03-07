@@ -38,7 +38,29 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
         <div style={{ display: "flex", minHeight: "100vh" }}> {/*anything on style can be moved to future css file*/}
             <TeacherSidebar courses={courses} onAddCourse={() => setShowAddModal(true)} /> {/*courses={course} prints the array and onAddCourse={( ... makes the menu for adding a course show by setting it active*/}
             <main style={{ padding: "10px", flex: 1 }}> {/* the filter goes though the array to only print the active ones on the main page*/}
-            
+
+                {/*menu for new course add */}
+                {showAddModal && (
+                    <div className="addMenu">
+                        <h2>Add New Course</h2>
+                        <div className="new-courseinfo">
+                            <label>Enter course code:
+                                <input className="boxforcode" name="code" value={newCourse.code} onChange={handleInputChange} placeholder="Course Code e.g. SOEN 287" />
+                            </label>
+
+                            <label>Enter course name:
+                                <input  className="boxforname" name="name" value={newCourse.name} onChange={handleInputChange} placeholder="Course Name" />
+                            </label>
+
+                            <label>Enter course term:
+                                <input className="boxforterm" name="term" value={newCourse.term} onChange={handleInputChange} placeholder="Term" />
+                            </label>
+                        </div>
+                            <button onClick={addCourse}>Add Course</button>  {/*button at the end to confirm*/}
+                            <button onClick={() => setShowAddModal(false)}>Cancel</button>  {/*in case give up on adding*/}
+                    </div>
+                )}
+
                 {courses.filter(course => course.isActive).map(course => ( 
                     <div key={course.id} className="course"> 
                         <h2>{course.name}</h2> {/*prints the name can be changed to also have code and session*/}
@@ -69,27 +91,6 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
                     </div>
                 ))}
 
-                {/*menu for new course add */}
-                {showAddModal && (
-                    <div className="addMenu">
-                        <h2>Add New Course</h2>
-                        <div className="new-courseinfo">
-                            <label>Enter course code:
-                                <input className="boxforcode" name="code" value={newCourse.code} onChange={handleInputChange} placeholder="Course Code e.g. SOEN 287" />
-                            </label>
-
-                            <label>Enter course name:
-                                <input  className="boxforname" name="name" value={newCourse.name} onChange={handleInputChange} placeholder="Course Name" />
-                            </label>
-
-                            <label>Enter course term:
-                                <input className="boxforterm" name="term" value={newCourse.term} onChange={handleInputChange} placeholder="Term" />
-                            </label>
-                        </div>
-                            <button onClick={addCourse}>Add Course</button>  {/*button at the end to confirm*/}
-                            <button onClick={() => setShowAddModal(false)}>Cancel</button>  {/*in case give up on adding*/}
-                    </div>
-                )}
             </main>
         </div>
     );
