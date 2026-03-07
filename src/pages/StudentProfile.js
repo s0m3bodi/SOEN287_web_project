@@ -396,7 +396,7 @@ function Progress() {
                 fontWeight: "bold"
               }}
             >
-              {course.name}
+              {course.name}: {course.average}%
             </div>
           </div>
         </div>
