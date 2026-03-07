@@ -96,8 +96,17 @@ const CourseManagementPage = ({ courses, onUpdateCourse, onDeleteCourse }) => { 
             
             <div className="assignments">
                 <h2>Assessments</h2> {/*prints assessments as boxes that can be edited*/}
+                
+                {/*Column Labels*/}
+                <div className="assessmentHeaders">
+                    <span className="boxForType">Type</span>
+                    <span className="boxForWeight">Weight</span>
+                    <span className="boxForCompletionNumber">Completion</span>
+                </div>
+                
+                {/*Assessment inputs*/}
                 {courseData.assessments.map((assessment, index) => (
-                    <div key={index}>
+                    <div key={index} className="assessmentRow">
                         <input 
                             className="boxForType"
                             name="type" 

@@ -85,3 +85,14 @@
     cursor: pointer;
 }
 
+.assessmentHeaders, .assessmentRow{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+} 
+
+.assessmentHeaders{
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
