@@ -1,29 +1,11 @@
 # SOEN287_web_project
-building our first website with javascript for the SOEN 287 web programming course.
+building our first website with javascript for the SOEN 287 web programming course using React.
 
-Things missing to add to teacher page:
+by
+Fatmagul Dedek, 40340486
+Victoria Carneiro Pereira, 40342225
+Tasneem Sultana Chowdhury, 40342627 
+Ariane Elfy Madjofo Sofouet, 40326492 
 
-css file for sidebar
-
-css file for teacherPage
-
-css file for courseManagement page
-
-
-Provide reusable course structures for students. whatever this means
-
-change boxes of weight and completed to a different type so not incremented 1 by one
-
-optional*
-
-change course management so it prints course current info
-
-change course management so it prints assessments current info
-
-add button for edit info and move boxes for input so it shows only if buton pressed 
-
-add button for edit assessment info and move boxes for input so it only shows if button pressed
-
-add other statistics besides how many students completed like average grade or etc..
-
-better way to calculate percentage of students that completed assessment
+First submission: March 6th 2026
+Second submission: 
