@@ -163,3 +163,5 @@ const CourseManagementPage = ({ courses, onUpdateCourse, onDeleteCourse }) => { 
 
 
 export default CourseManagementPage;
+
+

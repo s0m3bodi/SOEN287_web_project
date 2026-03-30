@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import '../pagesCSS/TeacherSidebar.css'
 
-const TeacherSidebar = ({courses, onAddCourse}) => {//courses are the hardcoded ones, onAddCourse is for the new ones
+const TeacherSidebar = ({courses}) => {//courses are the hardcoded ones, onAddCourse is for the new ones
     const navigate = useNavigate();
     const handleLogout = () =>{
         navigate('/');
@@ -16,10 +16,11 @@ const TeacherSidebar = ({courses, onAddCourse}) => {//courses are the hardcoded 
                         <div>{course.name}</div> 
                     </Link>
                 ))}
-
+            {/*
             <div>
-                <button onClick={onAddCourse}>Add Course</button> {/*button to add a course*/}
+                <button onClick={onAddCourse}>Add Course</button> {/*button to add a course
             </div>
+            */}
             
             <div className="signOut">
                 <button onClick={handleLogout}>

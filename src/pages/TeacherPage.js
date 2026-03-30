@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from "react-router-dom";
 import TeacherSidebar from "../components/TeacherSidebar";
 import '../pagesCSS/TeacherPage.css'
 
@@ -36,11 +37,15 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
 
     return (
         <div style={{ display: "flex", minHeight: "100vh" }}> {/*anything on style can be moved to future css file*/}
-            <TeacherSidebar courses={courses} onAddCourse={() => setShowAddModal(true)} /> {/*courses={course} prints the array and onAddCourse={( ... makes the menu for adding a course show by setting it active*/}
+            <TeacherSidebar courses={courses}/> {/*courses={course} prints the array and onAddCourse={( ... makes the menu for adding a course show by setting it active*/}
             <main style={{ padding: "10px", flex: 1 }}> {/* the filter goes though the array to only print the active ones on the main page*/}
-
+                <h1>Courses</h1>
                 {/*menu for new course add */}
-                {showAddModal && (
+                {!showAddModal ? (
+                    <button id="add" onClick={() => setShowAddModal(true)}>
+                        Add Course  +
+                    </button> 
+                ) : (
                     <div className="addMenu">
                         <h2>Add New Course</h2>
                         <div className="new-courseinfo">
@@ -60,37 +65,43 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
                             <button onClick={() => setShowAddModal(false)}>Cancel</button>  {/*in case give up on adding*/}
                     </div>
                 )}
-
-                {courses.filter(course => course.isActive).map(course => ( 
-                    <div key={course.id} className="course"> 
-                        <h2>{course.name}</h2> {/*prints the name can be changed to also have code and session*/}
-                            
-                        <div className='coursecontent'>
-                            <h3>Assessments</h3> {/*print assessments with the completion percent*/}
-                            {/*checks if there is any assessments creates a list of them if yes*/}
-                            {course.assessments.length > 0 ? (  
-                                <ul> 
-                                {/* checks if the assessment is completed and there are students enrolled then computes percentage formated 2 decimal places*/}
-                                    {course.assessments.map((assessment, index) => {
-                                        const completionPercentage = assessment.completed && course.totalStudents > 0 
-                                                    ? ((assessment.completed / course.totalStudents) * 100).toFixed(2): 0;
-                                                    {/*return the list of assignment with the type and percentage*/}
-                                        return ( 
-                                            <li key={index}>
-                                                {assessment.type}: {completionPercentage}% of students completed ({assessment.completed}/{course.totalStudents} students)
-                                            </li>
-                                            );                
-                                    })}        
-                                </ul>
-                            ) : (<p>No assessments available.</p>)} {/* if no assignments*/}
-
-                            <button onClick={() => toggleActive(course.id)}> {/* button for actice status*/}
-                                Mark as {course.isActive ? "Inactive" : "Active"}
-                            </button>
-                        </div>
-                    </div>
-                ))}
-
+                <div className="course-grid">
+                    {courses.filter(course => course.isActive).map(course => (
+                        <Link key={course.id} to={`/course/${course.id}`} className="course-link">
+                            <div className="course"> 
+                                <h2>{course.code}</h2> {/*prints the name can be changed to also have code and session*/}
+                                <p>{course.name}</p>
+                                <p>{course.term}</p>
+                                
+                                <div className='coursecontent'>
+                                    {/* <h3>Assessments</h3> {/*print assessments with the completion percent
+                                    checks if there is any assessments creates a list of them if yes
+                                    {course.assessments.length > 0 ? (  
+                                        <ul> 
+                                        checks if the assessment is completed and there are students enrolled then computes percentage formated 2 decimal places
+                                            {course.assessments.map((assessment, index) => {
+                                                const completionPercentage = assessment.completed && course.totalStudents > 0 
+                                                            ? ((assessment.completed / course.totalStudents) * 100).toFixed(2): 0;
+                                                            return the list of assignment with the type and percentage
+                                                return ( 
+                                                    <li key={index}>
+                                                        {assessment.type}: {completionPercentage}% of students completed ({assessment.completed}/{course.totalStudents} students)
+                                                    </li>
+                                                    );                
+                                            })}        
+                                        </ul>
+                                    ) : (<p>No assessments available.</p>)} if no assignments*/}
+                                    <button onClick={(e) => {
+                                        e.preventDefault(); // prevents the button from also triggering the navigation 
+                                        toggleActive(course.id);
+                                    }}> {/* button for actice status*/}
+                                        Mark as {course.isActive ? "Inactive" : "Active"}
+                                    </button>
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
             </main>
         </div>
     );
