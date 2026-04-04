@@ -38,7 +38,7 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
     return (
         <div style={{ display: "flex", minHeight: "100vh" }}> {/*anything on style can be moved to future css file*/}
             <TeacherSidebar courses={courses}/> {/*courses={course} prints the array and onAddCourse={( ... makes the menu for adding a course show by setting it active*/}
-            <main style={{ padding: "10px", flex: 1 }}> {/* the filter goes though the array to only print the active ones on the main page*/}
+            <main style={{ flex: 1 }}> {/* the filter goes though the array to only print the active ones on the main page*/}
                 <h1>Courses</h1>
                 {/*menu for new course add */}
                 {!showAddModal ? (

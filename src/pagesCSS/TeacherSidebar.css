@@ -4,7 +4,8 @@
     background-color: #590016;
     color: white;
     padding: 20px;
-    margin-right:30px;
+    margin-right: 0px;
+    border-right: solid 1px white;
 }
 .sidebar a {
     padding-bottom: 6px;
@@ -22,7 +23,6 @@
     background: none;
     border: none;
     color: white;
-    text-decoration: underlin3;
 }
 
 .signOut {

@@ -1,12 +1,12 @@
 main {
     margin-top: 30px;
+    padding: 10px 30px;
 }
 .course-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 25px;
     justify-content: start;
-    padding-right: 20px;
 }
 .course {
     border: 1px solid #ddd;

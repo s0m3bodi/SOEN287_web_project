@@ -1,24 +1,9 @@
 class Assessment {
-    constructor(type, name, deadline, weight){
+    constructor(type = "", name = "", deadline = "", weight = 0){
         this.type = type;
         this.name = name;
         this.deadline = deadline;
         this.weight = weight;
     }
-
-    type(){
-        return this.type;
-    }
-
-    name(){
-        return this.name;
-    }
-
-    deadline(){
-        return this.deadline;
-    }
-
-    weight(){
-        return this.weight;
-    }
 }
+export default Assessment;

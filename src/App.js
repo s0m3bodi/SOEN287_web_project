@@ -4,7 +4,9 @@ import StudentProfile from "./pages/StudentProfile";
 import TeacherPage from "./pages/TeacherPage";
 import LoginPage from "./pages/LoginPage";
 import CourseManagementPage from "./pages/CourseManagementPage";
+import ManageAssessments from "./pages/ManageAssessments";
 import { courses as hardcodedCourses } from "./components/Data";
+
 function App(){
     const [courses, setCourses] = useState(hardcodedCourses); //initiates the array with the data stored in Data.js needs to be here so updates work
 
@@ -28,10 +30,11 @@ function App(){
     };
 
   
-{/*needs to have both courses and onUpdateCourses to work since it has hardcoded and not valuers*/}
+// needs to have both courses and onUpdateCourses to work since it has hardcoded and not values
     
   return(
     <Router>
+      
       <Routes>
         <Route path="/" element={<LoginPage/>}/>
         <Route path="/student/*" element={<StudentProfile/>}/>
@@ -48,6 +51,15 @@ function App(){
               onDeleteCourse={deleteCourse} 
             />
           } 
+        />
+        <Route 
+          path="/course/:id/assessments" 
+          element={
+            <ManageAssessments
+              courses={courses}
+              onUpdateCourse={updateCourse}
+            />
+          }
         />
       </Routes>
     </Router>
