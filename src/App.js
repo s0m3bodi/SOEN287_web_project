@@ -7,7 +7,7 @@ import CourseManagementPage from "./pages/CourseManagementPage";
 import ManageAssessments from "./pages/ManageAssessments";
 import { courses as hardcodedCourses } from "./components/Data";
 import { CoursesContext } from "./context/CoursesContext";
-import { ThemeProvider, useTheme } from './context/ThemeContext';
+// import { ThemeProvider, useTheme } from './context/ThemeContext';
 
 // Protected route for role-based access
 const ProtectedRoute = ({ role, children }) => {
@@ -42,7 +42,7 @@ function App() {
         
             <CoursesContext.Provider value={courses}>
                 <Router>
-                     {/* Global toggle visible on all pages */}
+                     
                     <Routes>
                         <Route path="/" element={<LoginPage />} />
 
