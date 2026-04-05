@@ -6,7 +6,7 @@ const SecondaryTNavbar= ({ courseId }) => {
     return (
         <div className="bar">
                 <NavLink 
-                    to={`/course/${courseId}`}
+                    to={`/course/${courseId}`} end // So that the routed doen't match with the sub-pages
                     className={({isActive}) => isActive ? "active" : ""}>
                     Classroom
                 </NavLink>

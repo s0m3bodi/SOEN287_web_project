@@ -1,0 +1,108 @@
+.AssessPage {
+    display: flex;
+    min-height: 100vh;
+    padding: 0;
+}
+.mainAssessPage {
+    margin: 0;
+    padding: 0;
+}
+.mainAssessPage h1 {
+    background-color: #590016;
+    color: white;
+    margin: 0px 0px 20px;
+    padding: 10px 15px;
+
+}
+.AssessHeader {
+    background-color: #f9f9f9;
+    padding: 0 20px 20px;
+    margin: 0 20px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    display: flex;
+    justify-content: space-between;
+
+}
+.AssessCard {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 20px;
+}
+.inactive {
+    opacity: 0.5;
+}
+.inactive button {
+    background-color: gray;
+}
+.EditAssessCard {
+    display: grid;  
+    gap: 10px;
+    margin-top: 10px;
+}
+.EditAssessCard select {
+    appearance: none;
+    margin-left: 5px;
+    padding: 3px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: white;
+    width: 45%;
+    cursor: pointer;
+}
+.EditAssessCard input {
+    margin-left: 5px;
+    padding: 3px;
+    outline: none;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    width: 45%;
+    cursor: pointer;
+}
+.EditAssessCard input:hover, .EditAssessCard select:hover {
+    border-color: #870626;
+}
+.EditAssessCard input:focus, .EditAssessCard select:focus {
+    outline: none;
+    background-color: #f3e6e9;
+    border: 1px solid #870626;
+    border-radius: 3px;
+}
+.Delete, .activate {
+    color: white;
+    background-color: #590016;
+    padding: 7px;
+    margin-top: 10px;
+    width: 130px;
+    border: 2px solid;
+    border-radius: 7px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.AddAssessment {
+    margin: 20px 20px 0 20px;
+    background-color: #590016;
+    border: 1px solid white;
+    color: white;
+    font-size: 14px;
+    border-radius: 10px;
+    padding: 15px;
+}
+.SaveAssessment, .BackHome {
+    color: white;
+    background-color: #590016;
+    padding: 7px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    width: 130px;
+    border: 2px solid;
+    border-radius: 7px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.Editing-buttons {
+    display: flex;
+    gap: 10px;
+}
