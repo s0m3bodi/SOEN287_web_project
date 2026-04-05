@@ -663,6 +663,13 @@ const today = new Date();
 
 function StudentProfile() {
   const { theme, toggleTheme } = useTheme();
+  const [enrolledCourses, setEnrolledCourses] = useState(loadStudentData("enrolled_courses") || []);
+
+  // Optional: function to update and save to localStorage
+  const updateEnrolledCourses = (updated) => {
+    setEnrolledCourses(updated);
+    saveStudentData("enrolled_courses", updated);
+  };
   return (
     <div>
       <MainStudentSideBar />
