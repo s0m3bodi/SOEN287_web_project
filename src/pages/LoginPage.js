@@ -60,20 +60,40 @@ function LoginPage () { //defines a component that does something
       if (username===employeeInfo.username && password === employeeInfo.password){
         localStorage.setItem("userId", employeeInfo.id);
         localStorage.setItem("userRole", "teacher");
-        localStorage.setItem("currentTeacher", JSON.stringify(employeeInfo));
-        alert ('Login Successful!');
+      const existingTeacher = localStorage.getItem("currentTeacher");
+  if (existingTeacher) {
+    const parsed = JSON.parse(existingTeacher);
+    // only overwrite if it's a different teacher
+    if (parsed.id !== employeeInfo.id) {
+      localStorage.setItem("currentTeacher", JSON.stringify(employeeInfo));
+    }
+    } else {
+    // first time login, set the default
+    localStorage.setItem("currentTeacher", JSON.stringify(employeeInfo));
+  }
+
+       alert ('Login Successful!');
         navigate('/teacher');
         return;
       }
+const registeredTeachers = JSON.parse(localStorage.getItem("registeredTeachers") || "[]");
+      const foundTeacher = registeredTeachers.find(t => t.username === username && t.password === password);
 
-      const storedTeachers = JSON.parse(localStorage.getItem("registeredTeachers") || "[]");
-      const foundTeacher = storedTeachers.find(t => t.username === username && t.password === password);
-
+    
       if (foundTeacher) {
-        localStorage.setItem("userId", foundTeacher.id);
-        localStorage.setItem("userRole", "teacher");
-        localStorage.setItem("currentTeacher", JSON.stringify(foundTeacher));
-        alert('Login Successful!');
+  localStorage.setItem("userId", foundTeacher.id);
+  localStorage.setItem("userRole", "teacher");
+
+  const existingTeacher = localStorage.getItem("currentTeacher");
+  if (existingTeacher) {
+    const parsed = JSON.parse(existingTeacher);
+    if (parsed.id !== foundTeacher.id) {
+      localStorage.setItem("currentTeacher", JSON.stringify(foundTeacher));
+    }
+  } else {
+    localStorage.setItem("currentTeacher", JSON.stringify(foundTeacher));
+  }
+   alert('Login Successful!');
         navigate('/teacher');
       }else{
         setError('Invalid username or password.');
@@ -83,20 +103,36 @@ function LoginPage () { //defines a component that does something
       if (username === studentInfo.username && password === studentInfo.password) { //checks if password right
        localStorage.setItem("userId", studentInfo.id);
        localStorage.setItem("userRole", "student");
-       localStorage.setItem("currentStudent", JSON.stringify(studentInfo));
+       const existingStudent = localStorage.getItem("currentStudent");
+  if (existingStudent) {
+    const parsed = JSON.parse(existingStudent);
+    if (parsed.id !== studentInfo.id) {
+      localStorage.setItem("currentStudent", JSON.stringify(studentInfo));
+    }
+  } else {
+    localStorage.setItem("currentStudent", JSON.stringify(studentInfo));
+  }
+
        alert ('Login Successful!');
        navigate('/student');
        return;
       }
+const registeredStudents = JSON.parse(localStorage.getItem("registeredStudents") || "[]");
+      const foundStudent = registeredStudents.find(s => s.username === username && s.password === password);
+    if (foundStudent) {
+  localStorage.setItem("userId", foundStudent.id);
+  localStorage.setItem("userRole", "student");
 
-      const storedStudents = JSON.parse(localStorage.getItem("registeredStudents") || "[]");
-      const foundStudent = storedStudents.find(s => s.username === username && s.password === password);
-
-      if (foundStudent) {
-        localStorage.setItem("userId", foundStudent.id);
-        localStorage.setItem("userRole", "student");
-        localStorage.setItem("currentStudent", JSON.stringify(foundStudent));
-        alert('Login Successful!');
+  const existingStudent = localStorage.getItem("currentStudent");
+  if (existingStudent) {
+    const parsed = JSON.parse(existingStudent);
+    if (parsed.id !== foundStudent.id) {
+      localStorage.setItem("currentStudent", JSON.stringify(foundStudent));
+    }
+  } else {
+    localStorage.setItem("currentStudent", JSON.stringify(foundStudent));
+  }
+    alert('Login Successful!');
         navigate('/student');
       }
       else {

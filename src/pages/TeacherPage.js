@@ -6,6 +6,7 @@ import '../pagesCSS/TeacherPage.css'
 //the on update is important so when something is changed it also shows on the homepage and side bar
 
 
+
 const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcoded + added courses(onUpdate)
    
     const [newCourse, setNewCourse] = useState({ code: '', name: '', term: '', assessments: [] }); //new courses
@@ -17,6 +18,10 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
         email: "",
         id: ""
     });
+    const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState({});
+const [unsaved, setUnsaved] = useState(false);
+
 
     useEffect(() => {
         const stored = localStorage.getItem("currentTeacher");
@@ -31,7 +36,64 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
     }
   }, []);
 
+   const handleEdit = () => {
+    setForm({
+      firstName: teacher.firstName,
+      lastName: teacher.lastName,
+      email: teacher.email
+    });
+    setEditing(true);
+    setUnsaved(false);
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+   setUnsaved(true);
+};
    
+   const handleSave = () => {
+    if (!form.firstName || !form.lastName || !form.email) {
+      alert("All fields are required.");
+      return;
+    }
+
+     // update currentTeacher in localStorage
+    const stored = JSON.parse(localStorage.getItem("currentTeacher") || "{}");
+    const updated = {
+      ...stored,
+      firstName: form.firstName,
+      lastName: form.lastName,
+      email: form.email
+    };
+    localStorage.setItem("currentTeacher", JSON.stringify(updated));
+
+    // if registered teacher, also update in registeredTeachers array
+    const registeredTeachers = JSON.parse(localStorage.getItem("registeredTeachers") || "[]");
+    const updatedTeachers = registeredTeachers.map(t =>
+      t.id === stored.id ? { ...t, firstName: form.firstName, lastName: form.lastName, email: form.email } : t
+    );
+    localStorage.setItem("registeredTeachers", JSON.stringify(updatedTeachers));
+
+    setTeacher(prev => ({
+      ...prev,
+      firstName: form.firstName,
+      lastName: form.lastName,
+      email: form.email
+    }));
+    setUnsaved(false);
+    setEditing(false);
+     alert("Profile saved successfully!");
+  };
+
+  const handleCancel = () => {
+    if (unsaved) {
+      const confirm = window.confirm("You have unsaved changes. Are you sure you want to cancel?");
+      if (!confirm) return;
+    }
+    setEditing(false);
+    setUnsaved(false);
+  };
+
 
     const handleInputChange = (e) => { //handles the input for new courses (like set in java)
         setNewCourse({ ...newCourse, [e.target.name]: e.target.value }); 
@@ -63,91 +125,114 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
                
                 <h1>Courses</h1>
                  {/* Teacher profile info */}
-        <div style={{
-          backgroundColor: "#f5f5f5",
-          padding: "12px 16px",
-          borderRadius: "8px",
-          marginBottom: "20px",
-          display: "inline-block"
-        }}>
-          <p style={{ margin: 0 }}>
-            <b>{teacher.firstName} {teacher.lastName}</b>
-          </p>
-          <p style={{ margin: 0, fontSize: "14px", color: "#555" }}>
-            Teacher ID: {teacher.id}
-          </p>
-          <p style={{ margin: 0, fontSize: "14px", color: "#555" }}>
-            Email: {teacher.email}
-          </p>
+        <div className="teacher-profile-box">
+            {editing ? (
+            <>
+              <div className="teacher-edit-field">
+                <label>First Name:</label>
+                <input name="firstName" value={form.firstName} onChange={handleChange} />
+              </div>
+              <div className="teacher-edit-field">
+                <label>Last Name:</label>
+                <input name="lastName" value={form.lastName} onChange={handleChange} />
+              </div>
+              <div className="teacher-edit-field">
+                <label>Email:</label>
+                <input name="email" value={form.email} onChange={handleChange} />
+              </div>
+              <p className="teacher-profile-id">Teacher ID: {teacher.id}</p>
+               {unsaved && (
+                <p style={{ color: "#A9445A", fontSize: "13px", marginBottom: "8px" }}>
+                  ● Unsaved changes
+                </p>
+              )}
+
+              <div className="teacher-button-group">
+                <button className="teacher-save-btn" onClick={handleSave}>Save</button>
+                <button className="teacher-cancel-btn" onClick={handleCancel}>Cancel</button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="teacher-profile-name">{teacher.firstName} {teacher.lastName}</p>
+              <p className="teacher-profile-meta">Teacher ID: {teacher.id}</p>
+              <p className="teacher-profile-meta">Email: {teacher.email}</p>
+              <button className="teacher-edit-btn" onClick={handleEdit}>Edit Profile</button>
+            </>
+          )}
         </div>
-                {/*menu for new course add */}
-                {!showAddModal ? (
-                    <button id="add" onClick={() => setShowAddModal(true)}>
-                        Add Course  +
-                    </button> 
-                ) : (
-                    <div className="addMenu">
-                        <h2>Add New Course</h2>
-                        <div className="new-courseinfo">
-                            <label>Enter course code:
-                                <input className="boxforcode" name="code" value={newCourse.code} onChange={handleInputChange} placeholder="Course Code e.g. SOEN 287" />
-                            </label>
 
-                            <label>Enter course name:
-                                <input  className="boxforname" name="name" value={newCourse.name} onChange={handleInputChange} placeholder="Course Name" />
-                            </label>
+        {/* Add course button/modal */}
+        {!showAddModal ? (
+          <button id="add" onClick={() => setShowAddModal(true)}>
+            Add Course +
+          </button>
+        ) : (
+          <div className="addMenu">
+            <h2>Add New Course</h2>
+            <div className="new-courseinfo">
+              <label>Enter course code:
+                <input
+                  className="boxforcode"
+                  name="code"
+                  value={newCourse.code}
+                  onChange={handleInputChange}
+                  placeholder="Course Code e.g. SOEN 287"
+                />
+              </label>
+              <label>Enter course name:
+                <input
+                  className="boxforname"
+                  name="name"
+                  value={newCourse.name}
+                  onChange={handleInputChange}
+                  placeholder="Course Name"
+                />
+              </label>
+              <label>Enter course term:
+                <input
+                  className="boxforterm"
+                  name="term"
+                  value={newCourse.term}
+                  onChange={handleInputChange}
+                  placeholder="Term"
+                />
+              </label>
+            </div>
+            <button onClick={addCourse}>Add Course</button>
+            <button onClick={() => setShowAddModal(false)}>Cancel</button>
+          </div>
+        )}
 
-                            <label>Enter course term:
-                                <input className="boxforterm" name="term" value={newCourse.term} onChange={handleInputChange} placeholder="Term" />
-                            </label>
-                        </div>
-                            <button onClick={addCourse}>Add Course</button>  {/*button at the end to confirm*/}
-                            <button onClick={() => setShowAddModal(false)}>Cancel</button>  {/*in case give up on adding*/}
-                    </div>
-                )}
-                <div className="course-grid">
-                    {courses.filter(course => course.isActive).map(course => (
-                        <Link key={course.id} to={`/course/${course.id}`} className="course-link">
-                            <div className="course"> 
-                                <h2>{course.code}</h2> {/*prints the name can be changed to also have code and session*/}
-                                <p>{course.name}</p>
-                                <p>{course.term}</p>
-                                
-                                <div className='coursecontent'>
-                                    {/* <h3>Assessments</h3> {/*print assessments with the completion percent
-                                    checks if there is any assessments creates a list of them if yes
-                                    {course.assessments.length > 0 ? (  
-                                        <ul> 
-                                        checks if the assessment is completed and there are students enrolled then computes percentage formated 2 decimal places
-                                            {course.assessments.map((assessment, index) => {
-                                                const completionPercentage = assessment.completed && course.totalStudents > 0 
-                                                            ? ((assessment.completed / course.totalStudents) * 100).toFixed(2): 0;
-                                                            return the list of assignment with the type and percentage
-                                                return ( 
-                                                    <li key={index}>
-                                                        {assessment.type}: {completionPercentage}% of students completed ({assessment.completed}/{course.totalStudents} students)
-                                                    </li>
-                                                    );                
-                                            })}        
-                                        </ul>
-                                    ) : (<p>No assessments available.</p>)} if no assignments*/}
-                                    <button onClick={(e) => {
-                                        e.preventDefault(); // prevents the button from also triggering the navigation 
-                                        toggleActive(course.id);
-                                    }}> {/* button for actice status*/}
-                                        Mark as {course.isActive ? "Inactive" : "Active"}
-                                    </button>
-                                </div>
-                            </div>
-                        </Link>
-                    ))}
+        {/* Course grid */}
+        <div className="course-grid">
+          {courses.filter(course => course.isActive).map(course => (
+            <Link key={course.id} to={`/course/${course.id}`} className="course-link">
+              <div className="course">
+                <h2>{course.code}</h2>
+                <p>{course.name}</p>
+                <p>{course.term}</p>
+                <div className="coursecontent">
+                  <button onClick={(e) => {
+                    e.preventDefault();
+                    toggleActive(course.id);
+                  }}>
+                    Mark as {course.isActive ? "Inactive" : "Active"}
+                  </button>
                 </div>
-            </main>
+              </div>
+            </Link>
+          ))}
         </div>
-    );
+      </main>
+    </div>
+  );
 };
-    
 
 export default TeacherPage;
+         
+    
+
+
 
  
