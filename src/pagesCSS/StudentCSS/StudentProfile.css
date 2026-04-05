@@ -166,3 +166,13 @@ form button:hover {
 .course-card button:hover {
   background-color: #590016;
 }
+
+.addcourse{
+  background-color: #590016;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 20px;
+}
