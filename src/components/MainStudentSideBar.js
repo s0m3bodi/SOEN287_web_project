@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useTheme } from "../context/ThemeContext";
+// import { useTheme } from "../context/ThemeContext";
 
 function MainStudentSideBar({theme}) {
     const navigate = useNavigate();
