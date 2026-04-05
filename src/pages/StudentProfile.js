@@ -671,7 +671,7 @@ function StudentProfile() {
     saveStudentData("enrolled_courses", updated);
   };
   return (
-    <div>
+     <div className={theme === "light" ? "light-theme" : "dark-theme"}>
       <MainStudentSideBar />
 
       <div
@@ -691,6 +691,7 @@ function StudentProfile() {
           <Route path="courses/:id" element={<StudentCourseManagement />} />
           <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} />} />
           <Route path="progress" element={<Progress />} />
+          <Route path="Calendar" element={<Calendar />} />
         </Routes>
       </div>
     </div>
