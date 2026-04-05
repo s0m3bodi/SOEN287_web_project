@@ -7,7 +7,6 @@ import '../pagesCSS/StudentCSS/Calendar.css';
 // import { useTheme } from '../context/ThemeContext';
 import { useState } from 'react';
 import { useEffect } from 'react'; 
-import StudentCourseManagement from '../pages/StudentCourseManagement';
 // helper to get current student ID
 function getStudentId() {
   return localStorage.getItem("userId") || "Unknown";
