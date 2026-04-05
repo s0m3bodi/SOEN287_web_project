@@ -96,13 +96,51 @@ function Dashboard() {
     borderRadius: "8px"
   };
 
-  const progressBarContainer = {
-    width: "100%",
-    height: "24px",
-    backgroundColor: "#d3d3d3",
-    borderRadius: "10px",
-    overflow: "hidden",
-    marginBottom: "10px"
+  const CircularProgressBar = ({ percentage }) => {
+    const radius = 50;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (percentage / 100) * circumference;
+
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <svg width="150" height="150" style={{ transform: "rotate(-90deg)" }}>
+          {/* Background circle */}
+          <circle
+            cx="75"
+            cy="75"
+            r={radius}
+            fill="none"
+            stroke="#e0e0e0"
+            strokeWidth="8"
+          />
+          {/* Progress circle */}
+          <circle
+            cx="75"
+            cy="75"
+            r={radius}
+            fill="none"
+            stroke="#590016"
+            strokeWidth="8"
+            strokeDasharray={circumference}
+            strokeDashoffset={offset}
+            strokeLinecap="round"
+            style={{ transition: "stroke-dashoffset 0.5s ease" }}
+          />
+        </svg>
+        {/* Percentage text in center */}
+        <div
+          style={{
+            position: "absolute",
+            fontSize: "32px",
+            fontWeight: "bold",
+            color: "#590016",
+            textAlign: "center"
+          }}
+        >
+          {Math.round(percentage)}%
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -114,23 +152,7 @@ function Dashboard() {
         <div style={sectionStyle}>
           
           <h3>Overall Average</h3>
-          <div style={progressBarContainer}>
-            <div
-              style={{
-                width: `${Math.round(overall)}%`,
-                height: "100%",
-                backgroundColor: "black",
-                color: "white",
-                fontSize: "12px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                paddingRight: "8px"
-              }}
-            >
-              {Math.round(overall)}%
-            </div>
-          </div>
+          <CircularProgressBar percentage={overall} />
         </div>
         </div>
         <div className='dashboard-card'>
@@ -321,10 +343,10 @@ const handleCancel = () => {
 }
 
 function Courses(){ 
-   const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
-    const [form, setForm] = useState({
+  const [form, setForm] = useState({
     code: "",
     name: "",
     instructor: "",
@@ -338,25 +360,25 @@ function Courses(){
 
   useEffect(() => {
     if (loaded) {
-    saveStudentData("enrolled_courses", courses);
-    // sync dashboard_courses to match enrolled courses
+      saveStudentData("enrolled_courses", courses);
+
+      // sync dashboard_courses to match enrolled courses
+      const existing = loadStudentData("dashboard_courses");
+
       const dashboardCourses = courses.map((c, index) => {
-        // keep existing average if course already exists in dashboard
-        const existing = loadStudentData("dashboard_courses");
         const match = existing.find(d => d.name === c.code);
+
         return {
           id: index + 1,
           name: c.code,
           average: match ? match.average : 0
         };
       });
+
       saveStudentData("dashboard_courses", dashboardCourses);
-    
     }
   }, [courses, loaded]);
 
-
-  
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -383,25 +405,32 @@ function Courses(){
   };
 
   const deleteCourse = (index) => {
-   const courseToDelete = courses[index];
+    const courseToDelete = courses[index];
 
-   const updatedCourses = courses.filter((_, i) => i !== index);
-  setCourses(updatedCourses);
+    const updatedCourses = courses.filter((_, i) => i !== index);
+    setCourses(updatedCourses);
 
     const existingAssessments = loadStudentData("assessments");
-    saveStudentData("assessments", existingAssessments.filter(a => a.course !== courseToDelete.code));
+    saveStudentData(
+      "assessments",
+      existingAssessments.filter(a => a.course !== courseToDelete.code)
+    );
 
     const existingUpcoming = loadStudentData("upcoming");
-    saveStudentData("upcoming", existingUpcoming.filter(u => u.course !== courseToDelete.code));
+    saveStudentData(
+      "upcoming",
+      existingUpcoming.filter(u => u.course !== courseToDelete.code)
+    );
 
     const existingDashboard = loadStudentData("dashboard_courses");
-  saveStudentData("dashboard_courses", existingDashboard.filter(d => d.name !== courseToDelete.code));
-
+    saveStudentData(
+      "dashboard_courses",
+      existingDashboard.filter(d => d.name !== courseToDelete.code)
+    );
   };
 
   return (
     <div className="details-section">
-
       <h2>My Courses</h2>
 
       <form onSubmit={addCourse}>
@@ -439,20 +468,19 @@ function Courses(){
       {courses.length === 0 ? (
         <p>No courses added yet.</p>
       ) : (
-      courses.map((c, index) => (
-        <div key={index} className="course-card">
-          <h3>{c.code}</h3>
-          <p>{c.name}</p>
-          <p>{c.instructor}</p>
-          <p>{c.term}</p>
+        courses.map((c, index) => (
+          <div key={index} className="course-card">
+            <h3>{c.code}</h3>
+            <p>{c.name}</p>
+            <p>{c.instructor}</p>
+            <p>{c.term}</p>
 
-          <button onClick={() => deleteCourse(index)}>
-            Delete
-          </button>
-        </div>
-      ))
+            <button onClick={() => deleteCourse(index)}>
+              Delete
+            </button>
+          </div>
+        ))
       )}
-
     </div>
   );
 }
@@ -595,43 +623,74 @@ function Progress() {
     setCourses(loadStudentData("dashboard_courses"));
   }, []);
 
+  const CourseProgressCard = ({ course }) => {
+    const getProgressColor = (percentage) => {
+      if (percentage >= 80) return "#4CAF50"; // Green
+      if (percentage >= 60) return "#2196F3"; // Blue
+      if (percentage >= 40) return "#FF9800"; // Orange
+      return "#F44336"; // Red
+    };
+
+    return (
+      <div
+        key={course.name}
+        style={{
+          marginBottom: "20px",
+          padding: "15px",
+          backgroundColor: "#f9f9f9",
+          borderRadius: "8px",
+          border: "1px solid #e0e0e0",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+          <h4 style={{ margin: 0, color: "#333" }}>{course.name}</h4>
+          <span style={{ fontSize: "18px", fontWeight: "bold", color: getProgressColor(course.average) }}>
+            {course.average}%
+          </span>
+        </div>
+
+        <div
+          style={{
+            width: "100%",
+            height: "12px",
+            backgroundColor: "#e0e0e0",
+            borderRadius: "10px",
+            overflow: "hidden"
+          }}
+        >
+          <div
+            style={{
+              width: `${course.average}%`,
+              height: "100%",
+              backgroundColor: getProgressColor(course.average),
+              borderRadius: "10px",
+              transition: "width 0.3s ease"
+            }}
+          />
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "8px", fontSize: "12px", color: "#666" }}>
+          <span>{Math.round(course.average)} points earned</span>
+          <span>100 points total</span>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="details-section">
       <h2>Progress Overview</h2>
 
-    {courses.length === 0 ? (
+      {courses.length === 0 ? (
         <p>No course data available.</p>
       ) : (
-      courses.map((course) => (
-        <div key={course.name} style={{ marginBottom: "15px" }}>
-          <div
-            style={{
-              width: "100%",
-              height: "25px",
-              backgroundColor: "#d3d3d3",
-              borderRadius: "10px",
-              overflow: "hidden"
-            }}
-          >
-            <div
-              style={{
-                width: `${course.average}%`,
-                height: "100%",
-                backgroundColor: "black",
-                color: "white",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                paddingRight: "10px",
-                fontWeight: "bold"
-              }}
-            >
-              {course.name}: {course.average}%
-            </div>
-          </div>
+        <div>
+          {courses.map((course) => (
+            <CourseProgressCard key={course.name} course={course} />
+          ))}
         </div>
-      ))
-    )}
+      )}
     </div>
   );
 }
