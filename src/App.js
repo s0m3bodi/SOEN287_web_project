@@ -8,7 +8,7 @@ import ManageAssessments from "./pages/ManageAssessments";
 import StudentProgress from "./pages/StudentProgression";
 import { courses as hardcodedCourses } from "./components/Data";
 import { CoursesContext } from "./context/CoursesContext";
-import { ThemeProvider, useTheme } from './context/ThemeContext';
+// import { ThemeProvider, useTheme } from './context/ThemeContext';
 
 // Protected route for role-based access
 const ProtectedRoute = ({ role, children }) => {
@@ -17,29 +17,7 @@ const ProtectedRoute = ({ role, children }) => {
     return children;
 };
 
-// Optional: Dark/Light Mode Toggle Button
-function ThemeToggle() {
-    const { theme, toggleTheme } = useTheme();
-    return (
-        <button 
-            onClick={toggleTheme} 
-            style={{
-                position: "fixed",
-                top: "10px",
-                right: "10px",
-                padding: "8px 12px",
-                backgroundColor: theme === "dark" ? "#333" : "#eee",
-                color: theme === "dark" ? "#fff" : "#000",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                zIndex: 1000
-            }}
-        >
-            {theme === "dark" ? "Light Mode" : "Dark Mode"}
-        </button>
-    );
-}
+
 
 function App() {
     const [courses, setCourses] = useState(hardcodedCourses); // Initiate courses
@@ -62,10 +40,10 @@ function App() {
     };
 
     return (
-        <ThemeProvider>
+        
             <CoursesContext.Provider value={courses}>
                 <Router>
-                    <ThemeToggle /> {/* Global toggle visible on all pages */}
+                     
                     <Routes>
                         <Route path="/" element={<LoginPage />} />
 
@@ -110,8 +88,31 @@ function App() {
                     </Routes>
                 </Router>
             </CoursesContext.Provider>
-        </ThemeProvider>
+       
     );
 }
+// Optional: Dark/Light Mode Toggle Button
+// function ThemeToggle() {
+//     const { theme, toggleTheme } = useTheme();
+//     return (
+//         <button 
+//             onClick={toggleTheme} 
+//             style={{
+//                 position: "fixed",
+//                 top: "10px",
+//                 right: "10px",
+//                 padding: "8px 12px",
+//                 backgroundColor: theme === "dark" ? "#333" : "#eee",
+//                 color: theme === "dark" ? "#fff" : "#000",
+//                 border: "none",
+//                 borderRadius: "5px",
+//                 cursor: "pointer",
+//                 zIndex: 1000
+//             }}
+//         >
+//             {theme === "dark" ? "Light Mode" : "Dark Mode"}
+//         </button>
+//     );
+// }
 
 export default App;

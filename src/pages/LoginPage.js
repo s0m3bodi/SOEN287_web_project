@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../pagesCSS/LoginPage.css';
 import { generatedId } from '../utils/generatedId.js';
 
+
 function LoginPage () { //defines a component that does something
   const [username, setUsername] = useState(''); //useState creates "states"
   const [password, setPassword] = useState('');
