@@ -1,0 +1,114 @@
+.course-manager {
+    margin: 0 auto;
+}
+.course-manager main {
+    margin: 0 auto 20px;
+    padding: 0;
+}
+.course-manager h1 {
+    background-color: #590016;
+    color: white;
+    margin: 0;
+    padding: 10px 15px;
+}
+.Header {
+    display: flex;
+    justify-content: space-between;
+    background-color:#f9f9f9;
+    border: solid 1px #ddd;
+    border-radius: 25px;
+    padding: 0 20px 15px;
+    margin: 15px
+}
+.course-info {
+    margin: 5px 15px;
+}
+.course-info h2 {
+    margin-bottom: 15px
+}
+.course-info label {
+    display: block;
+    margin-right: 10px;
+    margin-top: 0px;
+}
+.course-info input {
+    margin-left: 5px;
+    margin-bottom: 5px;
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    padding: 5px;
+    caret-color: #590016
+}
+.course-info input:focus {
+    border: 1.5px solid #870626;
+    outline: none;
+}
+.course-info button {
+    background-color:#590016;
+    color: white;
+    margin-left: -1px;
+    padding: 10px 10px;
+    border: 2px solid;
+    border-radius: 7px;
+    cursor: pointer;
+}
+.course-info p {
+    margin: 15px 0px 5px;
+}
+.assignments {
+    margin: 5px 15px
+}
+.assignments input {
+    margin-right: 10px;
+    margin-bottom: 5px;
+    border: 1px solid lightgray;
+    border-radius: 2px;
+    padding: 3px;
+}
+.assignments input:focus {
+    outline: none;
+    border: 2px solid #870626;
+}
+.assignments button {
+    background-color:white;
+    color: #870626;
+    margin-left: -1px;
+    padding: 5px 10px;
+    border: 2px solid;
+    border-radius: 7px;
+    cursor: pointer;
+}
+.end-buttons button {
+    background-color:#590016;
+    color: white;
+    margin-top: 10px;
+    margin-left: 12px;
+    padding: 10px 10px;
+    border: 2px solid;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.edit{
+    color: white;
+    background-color: #590016;
+    padding: 7px;
+    margin-top: 20px;
+    width: 130px;
+    border: 2px solid;
+    border-radius: 7px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.assessmentHeaders, .assessmentRow{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+} 
+
+.assessmentHeaders{
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
