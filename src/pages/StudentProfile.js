@@ -3,12 +3,9 @@ import MainStudentSideBar from '../components/MainStudentSideBar';
 import defaultPP from "../pages/defaultPP.jpeg"
 import '../pagesCSS/StudentCSS/StudentProfile.css';
 import '../pagesCSS/StudentCSS/Calendar.css';
-import { useTheme } from "../context/ThemeContext";
+
 import { useState } from 'react';
 import { useEffect } from 'react'; 
-import { useCoursesContext } from '../context/CoursesContext';
-import { useNavigate } from "react-router-dom";
-import StudentCourseManagement from "../pages/StudentCourseManagement";
 
 // helper to get current student ID
 function getStudentId() {
@@ -170,7 +167,6 @@ function Dashboard({ theme }) {
 }
 
 function Profile() {
-  
   const [student, setStudent] = useState({
     firstName: "",
     lastName: "",
@@ -178,6 +174,9 @@ function Profile() {
     email: "",
     role: "Student"
   });
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState({});
+
   useEffect(() => {
     const stored = localStorage.getItem("currentStudent");
     if (stored) {
@@ -192,6 +191,56 @@ function Profile() {
     }
   }, []);
  
+  const handleEdit = () => {
+    setForm({
+      firstName: student.firstName,
+      lastName: student.lastName,
+      email: student.email
+    });
+    setEditing(true);
+  };
+
+   const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+   const handleSave = () => {
+    if (!form.firstName || !form.lastName || !form.email) {
+      alert("All fields are required.");
+      return;
+    }
+
+      // update currentStudent in localStorage
+    const stored = JSON.parse(localStorage.getItem("currentStudent") || "{}");
+    const updated = {
+      ...stored,
+      firstName: form.firstName,
+      lastName: form.lastName,
+      email: form.email
+    };
+    localStorage.setItem("currentStudent", JSON.stringify(updated));
+
+     // if registered student, also update in registeredStudents array
+    const registeredStudents = JSON.parse(localStorage.getItem("registeredStudents") || "[]");
+    const updatedStudents = registeredStudents.map(s =>
+      s.id === stored.id ? { ...s, firstName: form.firstName, lastName: form.lastName, email: form.email } : s
+    );
+    localStorage.setItem("registeredStudents", JSON.stringify(updatedStudents));
+
+    setStudent(prev => ({
+      ...prev,
+      firstName: form.firstName,
+      lastName: form.lastName,
+      email: form.email
+    }));
+    setEditing(false);
+  };
+
+const handleCancel = () => {
+    setEditing(false);
+  };
+
+
   return (
     <div className="container">
       <div className="profile-section">
@@ -205,104 +254,205 @@ function Profile() {
 
       <div className="details-section">
         <p><b>Student Details</b></p>
+
+         {editing ? (
+          <>
+            <div style={{ marginBottom: "10px" }}>
+              <label>First Name:</label>
+              <input
+                name="firstName"
+                value={form.firstName}
+                onChange={handleChange}
+                style={{ display: "block", padding: "8px", width: "100%", marginTop: "4px", borderRadius: "6px", border: "1px solid #ddd" }}
+              />
+            </div>
+            <div style={{ marginBottom: "10px" }}>
+              <label>Last Name:</label>
+              <input
+                name="lastName"
+                value={form.lastName}
+                onChange={handleChange}
+                style={{ display: "block", padding: "8px", width: "100%", marginTop: "4px", borderRadius: "6px", border: "1px solid #ddd" }}
+              />
+              </div>
+            <div style={{ marginBottom: "10px" }}>
+              <label>Email Address:</label>
+              <input
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                style={{ display: "block", padding: "8px", width: "100%", marginTop: "4px", borderRadius: "6px", border: "1px solid #ddd" }}
+              />
+            </div>
+<p>Student ID: {student.studentId}</p>
+            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+              <button
+                onClick={handleSave}
+                style={{ backgroundColor: "#590016", color: "white", border: "none", borderRadius: "6px", padding: "8px 20px", cursor: "pointer" }}
+              >
+                Save
+              </button>
+              <button
+                onClick={handleCancel}
+                style={{ backgroundColor: "#aaa", color: "white", border: "none", borderRadius: "6px", padding: "8px 20px", cursor: "pointer" }}
+              >
+                Cancel
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+          
         <p>First Name: {student.firstName}</p>
         <p>Last Name: {student.lastName}</p>
         <p>Student ID: {student.studentId}</p>
         <p>Email Address: {student.email}</p>
+        <button
+              onClick={handleEdit}
+              style={{ marginTop: "10px", backgroundColor: "#590016", color: "white", border: "none", borderRadius: "6px", padding: "8px 20px", cursor: "pointer" }}
+            >
+              Edit Profile
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
 }
 
-function Courses({ enrolledCourses, setEnrolledCourses }) {
-  const allCourses = useCoursesContext();
-  const [selected, setSelected] = useState("");
-  const navigate = useNavigate();
+function Courses(){ 
+   const [courses, setCourses] = useState([]);
+  const [loaded, setLoaded] = useState(false);
 
-  // Courses not yet enrolled
-  const available = allCourses.filter(
-    (c) => !enrolledCourses.some((e) => e.id === c.id)
-  );
+    const [form, setForm] = useState({
+    code: "",
+    name: "",
+    instructor: "",
+    term: ""
+  });
 
-  // Add course
-  const handleEnroll = () => {
-    if (!selected) return;
+  useEffect(() => {
+    setCourses(loadStudentData("enrolled_courses"));
+    setLoaded(true);
+  }, []);
 
-    const course = allCourses.find(
-      (c) => c.id === parseInt(selected)
-    );
-
-    if (course) {
-      setEnrolledCourses([...enrolledCourses, course]);
-      setSelected("");
+  useEffect(() => {
+    if (loaded) {
+    saveStudentData("enrolled_courses", courses);
+    // sync dashboard_courses to match enrolled courses
+      const dashboardCourses = courses.map((c, index) => {
+        // keep existing average if course already exists in dashboard
+        const existing = loadStudentData("dashboard_courses");
+        const match = existing.find(d => d.name === c.code);
+        return {
+          id: index + 1,
+          name: c.code,
+          average: match ? match.average : 0
+        };
+      });
+      saveStudentData("dashboard_courses", dashboardCourses);
+    
     }
+  }, [courses, loaded]);
+
+
+  
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
   };
 
-  // Remove course
-  const handleDrop = (id) => {
-    setEnrolledCourses(
-      enrolledCourses.filter((c) => c.id !== id)
-    );
+  const addCourse = (e) => {
+    e.preventDefault();
+
+    if (!form.code || !form.name) {
+      alert("Course code and name required");
+      return;
+    }
+
+    setCourses([...courses, form]);
+
+    setForm({
+      code: "",
+      name: "",
+      instructor: "",
+      term: ""
+    });
+  };
+
+  const deleteCourse = (index) => {
+   const courseToDelete = courses[index];
+
+   const updatedCourses = courses.filter((_, i) => i !== index);
+  setCourses(updatedCourses);
+
+    const existingAssessments = loadStudentData("assessments");
+    saveStudentData("assessments", existingAssessments.filter(a => a.course !== courseToDelete.code));
+
+    const existingUpcoming = loadStudentData("upcoming");
+    saveStudentData("upcoming", existingUpcoming.filter(u => u.course !== courseToDelete.code));
+
+    const existingDashboard = loadStudentData("dashboard_courses");
+  saveStudentData("dashboard_courses", existingDashboard.filter(d => d.name !== courseToDelete.code));
+
   };
 
   return (
     <div className="details-section">
+
       <h2>My Courses</h2>
 
-      {/* Add Course Section */}
-      <div style={{ marginBottom: "16px" }}>
-        <select
-          value={selected}
-          onChange={(e) => setSelected(e.target.value)}
-        >
-          <option value="">-- Select a course to add --</option>
-          {available.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.code} - {c.name} ({c.term})
-            </option>
-          ))}
-        </select>
+      <form onSubmit={addCourse}>
+        <input
+          name="code"
+          placeholder="Course Code"
+          value={form.code}
+          onChange={handleChange}
+        />
 
-        <button
-          className="addcourse"
-          onClick={handleEnroll}
-          disabled={!selected}
-        >
-          Add Course
-        </button>
-      </div>
+        <input
+          name="name"
+          placeholder="Course Name"
+          value={form.name}
+          onChange={handleChange}
+        />
 
-      {/* Course List */}
-      {enrolledCourses.length === 0 ? (
-        <p>No courses enrolled yet.</p>
+        <input
+          name="instructor"
+          placeholder="Instructor"
+          value={form.instructor}
+          onChange={handleChange}
+        />
+
+        <input
+          name="term"
+          placeholder="Term"
+          value={form.term}
+          onChange={handleChange}
+        />
+
+        <button>Add Course</button>
+      </form>
+
+      {courses.length === 0 ? (
+        <p>No courses added yet.</p>
       ) : (
-        enrolledCourses.map((c) => (
-          <div
-            key={c.id}
-            className="course-card"
-            onClick={() =>
-              navigate(`/student/courses/${c.id}`, {
-                state: { course: c },
-              })
-            }
-            style={{ cursor: "pointer" }}
-          >
-            <h3>{c.code}</h3>
-            <p>{c.name}</p>
-            <p>{c.term}</p>
-            <p>Status: {c.isActive ? "Active" : "Inactive"}</p>
+      courses.map((c, index) => (
+        <div key={index} className="course-card">
+          <h3>{c.code}</h3>
+          <p>{c.name}</p>
+          <p>{c.instructor}</p>
+          <p>{c.term}</p>
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation(); // prevent navigation
-                handleDrop(c.id);
-              }}
-            >
-              Drop Course
-            </button>
-          </div>
-        ))
+          <button onClick={() => deleteCourse(index)}>
+            Delete
+          </button>
+        </div>
+      ))
       )}
+
     </div>
   );
 }
@@ -667,14 +817,6 @@ const today = new Date();
                   
 
 function StudentProfile() {
-  const { theme, toggleTheme } = useTheme();
-  const [enrolledCourses, setEnrolledCourses] = useState(loadStudentData("enrolled_courses") || []);
-
-  // Optional: function to update and save to localStorage
-  const updateEnrolledCourses = (updated) => {
-    setEnrolledCourses(updated);
-    saveStudentData("enrolled_courses", updated);
-  };
   return (
      <div className={theme === "light" ? "light-section" : "dark-section"}>
       <button 
@@ -700,15 +842,14 @@ function StudentProfile() {
         }}
       >
         <Routes>
-          <Route index element={<Dashboard theme={theme}/>} />
-          <Route path="dashboard" element={<Dashboard theme={theme}/>} />
-          <Route path="profile" element={<Profile theme={theme}/>} />      
-          {/* <Route path="assessments" element={<Assessments theme={theme}/>} /> */}
-          <Route path="courses" element={<Courses enrolledCourses={enrolledCourses} setEnrolledCourses={updateEnrolledCourses} theme={theme}/>} />
-          <Route path="courses/:id" element={<StudentCourseManagement theme={theme}/>} />
-          <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} theme={theme}/>} />
-          <Route path="progress" element={<Progress theme={theme}/>} />
-          <Route path="Calendar" element={<Calendar />} />
+          <Route index element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="profile" element={<Profile />} />      
+          <Route path="assessments" element={<Assessments />} />
+          <Route path="courses" element={<Courses enrolledCourses={enrolledCourses} setEnrolledCourses={updateEnrolledCourses} />} />
+          <Route path="courses/:id" element={<StudentCourseManagement />} />
+          <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} />} />
+          <Route path="progress" element={<Progress />} />
         </Routes>
       </div>
     </div>
