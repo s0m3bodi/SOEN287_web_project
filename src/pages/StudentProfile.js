@@ -68,7 +68,7 @@ function saveStudentData(key, data) {
   localStorage.setItem(`${key}_${id}`, JSON.stringify(data));
 }
 
-function Dashboard() {
+function Dashboard({ theme }) {
 
   const [studentName, setStudentName] = useState("");
   const [courses, setCourses] = useState([]);
@@ -106,11 +106,13 @@ function Dashboard() {
   };
 
   return (
-    <div className="details-section">
+    <div className={`details-section ${theme === "light" ? "light-section" : "dark-section"}`}>
       <h2>Hi {studentName} 👋</h2>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
+        <div className='dashboard-card'>
         <div style={sectionStyle}>
+          
           <h3>Overall Average</h3>
           <div style={progressBarContainer}>
             <div
@@ -130,7 +132,8 @@ function Dashboard() {
             </div>
           </div>
         </div>
-
+        </div>
+        <div className='dashboard-card'>
         <div style={sectionStyle}>
           <h3>My Courses</h3>
           {courses.length === 0 ? (
@@ -143,7 +146,8 @@ function Dashboard() {
           ))
         )}
         </div>
-
+        </div>
+        <div className='dashboard-card'>
         <div style={sectionStyle}>
           <h3>Upcoming Assessments</h3>
           {upcoming.length === 0 ? (
@@ -157,6 +161,7 @@ function Dashboard() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }
@@ -813,8 +818,20 @@ const today = new Date();
 
 function StudentProfile() {
   return (
-    <div>
-      <MainStudentSideBar />
+     <div className={theme === "light" ? "light-section" : "dark-section"}>
+      <button 
+        onClick={toggleTheme}
+        style={{
+          position: "fixed",
+          top: "10px",
+          right: "10px",
+          padding: "8px 12px",
+          zIndex: 1000
+        }}
+      >
+        {theme === "dark" ? "Light Mode" : "Dark Mode"}
+      </button>
+      <MainStudentSideBar theme={theme}/>
 
       <div
         style={{
@@ -827,11 +844,12 @@ function StudentProfile() {
         <Routes>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="courses" element={<Courses />} />        
+          <Route path="profile" element={<Profile />} />      
           <Route path="assessments" element={<Assessments />} />
+          <Route path="courses" element={<Courses enrolledCourses={enrolledCourses} setEnrolledCourses={updateEnrolledCourses} />} />
+          <Route path="courses/:id" element={<StudentCourseManagement />} />
+          <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} />} />
           <Route path="progress" element={<Progress />} />
-          <Route path="calendar" element={<Calendar />} />
         </Routes>
       </div>
     </div>

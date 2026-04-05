@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
-function MainStudentSideBar() {
+function MainStudentSideBar({theme}) {
     const navigate = useNavigate();
     const handleLogout = () => {
         localStorage.removeItem('authUser');
@@ -20,9 +21,10 @@ function MainStudentSideBar() {
             boxSizing: "border-box",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between"
+            justifyContent: "space-between",
+            overflowX: "hidden"
         }}>
-            <div>
+            <div className={theme === "light" ? "sidebar light-sidebar" : "sidebar dark-sidebar"}>
                 <h2>Home Page</h2>
 
                 <nav>
