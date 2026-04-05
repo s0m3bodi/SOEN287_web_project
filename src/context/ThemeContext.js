@@ -1,30 +1,40 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
+// Create the context
 const ThemeContext = createContext();
 
-export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => {
-    // default to localStorage theme or light
-    return localStorage.getItem("theme") || "light";
-  });
+// Custom hook to make it easy to use theme elsewhere
+export const useTheme = () => useContext(ThemeContext);
 
+// Theme provider component
+export const ThemeProvider = ({ children }) => {
+  // Set initial theme to 'light'
+  const [theme, setTheme] = useState('light');
+
+  // On mount, check localStorage to load theme
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
+    const storedTheme = localStorage.getItem('appTheme');
+    if (storedTheme) {
+      setTheme(storedTheme);
+    }
+  }, []);
+
+  // Save theme to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('appTheme', theme);
   }, [theme]);
 
+  // Function to toggle theme between light and dark
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
 
+  // Provide the theme and toggle function to children
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
-}
+};
 
-// Custom hook to use theme easily
-export function useTheme() {
-  return useContext(ThemeContext);
-}
+
