@@ -3,7 +3,7 @@ import MainStudentSideBar from '../components/MainStudentSideBar';
 import defaultPP from "../pages/defaultPP.jpeg"
 import '../pagesCSS/StudentCSS/StudentProfile.css';
 import '../pagesCSS/StudentCSS/Calendar.css';
-import { useTheme } from '../context/ThemeContext';
+// import { useTheme } from '../context/ThemeContext';
 import { useState } from 'react';
 import { useEffect } from 'react'; 
 import StudentCourseManagement from '../pages/StudentCourseManagement';
@@ -68,7 +68,7 @@ function saveStudentData(key, data) {
   localStorage.setItem(`${key}_${id}`, JSON.stringify(data));
 }
 
-function Dashboard({ theme }) {
+function Dashboard() {
 
   const [studentName, setStudentName] = useState("");
   const [courses, setCourses] = useState([]);
@@ -106,7 +106,7 @@ function Dashboard({ theme }) {
   };
 
   return (
-    <div className={`details-section ${theme === "light" ? "light-section" : "dark-section"}`}>
+    <div className='details-section' >
       <h2>Hi {studentName} 👋</h2>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
@@ -817,7 +817,7 @@ const today = new Date();
                   
 
 function StudentProfile() {
-  const { theme, toggleTheme } = useTheme(); 
+  // const { theme, toggleTheme } = useTheme(); 
   const [enrolledCourses, setEnrolledCourses] = useState(loadStudentData("enrolled_courses") || []);
   const updateEnrolledCourses = (updated) => { setEnrolledCourses(updated); saveStudentData("enrolled_courses", updated); };
   return (
