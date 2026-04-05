@@ -71,7 +71,7 @@ function saveStudentData(key, data) {
   localStorage.setItem(`${key}_${id}`, JSON.stringify(data));
 }
 
-function Dashboard() {
+function Dashboard({ theme }) {
 
   const [studentName, setStudentName] = useState("");
   const [courses, setCourses] = useState([]);
@@ -109,11 +109,13 @@ function Dashboard() {
   };
 
   return (
-    <div className="details-section">
+    <div className={`details-section ${theme === "light" ? "light-section" : "dark-section"}`}>
       <h2>Hi {studentName} 👋</h2>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
+        <div className='dashboard-card'>
         <div style={sectionStyle}>
+          
           <h3>Overall Average</h3>
           <div style={progressBarContainer}>
             <div
@@ -133,7 +135,8 @@ function Dashboard() {
             </div>
           </div>
         </div>
-
+        </div>
+        <div className='dashboard-card'>
         <div style={sectionStyle}>
           <h3>My Courses</h3>
           {courses.length === 0 ? (
@@ -146,7 +149,8 @@ function Dashboard() {
           ))
         )}
         </div>
-
+        </div>
+        <div className='dashboard-card'>
         <div style={sectionStyle}>
           <h3>Upcoming Assessments</h3>
           {upcoming.length === 0 ? (
@@ -160,6 +164,7 @@ function Dashboard() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }
@@ -671,7 +676,7 @@ function StudentProfile() {
     saveStudentData("enrolled_courses", updated);
   };
   return (
-     <div className={theme === "light" ? "light-theme" : "dark-theme"}>
+     <div className={theme === "light" ? "light-section" : "dark-section"}>
       <button 
         onClick={toggleTheme}
         style={{
@@ -684,7 +689,7 @@ function StudentProfile() {
       >
         {theme === "dark" ? "Light Mode" : "Dark Mode"}
       </button>
-      <MainStudentSideBar />
+      <MainStudentSideBar theme={theme}/>
 
       <div
         style={{
