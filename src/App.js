@@ -7,64 +7,102 @@ import CourseManagementPage from "./pages/CourseManagementPage";
 import ManageAssessments from "./pages/ManageAssessments";
 import { courses as hardcodedCourses } from "./components/Data";
 import { CoursesContext } from "./context/CoursesContext";
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 
+// Protected route for role-based access
 const ProtectedRoute = ({ role, children }) => {
     const auth = localStorage.getItem('authUser');
     if (auth !== role) return <Navigate to="/" replace />;
     return children;
 };
 
-function App(){
-    const [courses, setCourses] = useState(hardcodedCourses); //initiates the array with the data stored in Data.js needs to be here so updates work
+// Optional: Dark/Light Mode Toggle Button
+function ThemeToggle() {
+    const { theme, toggleTheme } = useTheme();
+    return (
+        <button 
+            onClick={toggleTheme} 
+            style={{
+                position: "fixed",
+                top: "10px",
+                right: "10px",
+                padding: "8px 12px",
+                backgroundColor: theme === "dark" ? "#333" : "#eee",
+                color: theme === "dark" ? "#fff" : "#000",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                zIndex: 1000
+            }}
+        >
+            {theme === "dark" ? "Light Mode" : "Dark Mode"}
+        </button>
+    );
+}
 
-    const updateCourse = (updatedCourse) => { //function to update courses
+function App() {
+    const [courses, setCourses] = useState(hardcodedCourses); // Initiate courses
+
+    const updateCourse = (updatedCourse) => {
         setCourses(prevCourses => {
-          const existingCourse = prevCourses.find(course => course.id === updatedCourse.id);
-           if (existingCourse) {
-            // Update existing course
-            return prevCourses.map(course =>
-                course.id === updatedCourse.id ? updatedCourse : course
-            );
-        } else {
-            // Add new course
-            return [...prevCourses, updatedCourse];
-        }
-        });    
+            const existingCourse = prevCourses.find(course => course.id === updatedCourse.id);
+            if (existingCourse) {
+                return prevCourses.map(course =>
+                    course.id === updatedCourse.id ? updatedCourse : course
+                );
+            } else {
+                return [...prevCourses, updatedCourse];
+            }
+        });
     };
 
     const deleteCourse = (courseId) => {
-      setCourses(prevCourses => prevCourses.filter(course => course.id !== courseId));
+        setCourses(prevCourses => prevCourses.filter(course => course.id !== courseId));
     };
 
-  
-// needs to have both courses and onUpdateCourses to work since it has hardcoded and not values
-    
-  return(
-    <CoursesContext.Provider value={courses}>
-    <Router>
+    return (
+        <ThemeProvider>
+            <CoursesContext.Provider value={courses}>
+                <Router>
+                    <ThemeToggle /> {/* Global toggle visible on all pages */}
+                    <Routes>
+                        <Route path="/" element={<LoginPage />} />
 
-      <Routes>
-        <Route path="/" element={<LoginPage/>}/>
-        <Route path="/student/*" element={
-          <ProtectedRoute role="student"><StudentProfile/></ProtectedRoute>
-        }/>
-        <Route path="/teacher" element={
-          <ProtectedRoute role="teacher"><TeacherPage courses={courses} onUpdateCourse={updateCourse}/></ProtectedRoute>
-        }/>
-        <Route path="/course/:id" element={
-          <ProtectedRoute role="teacher">
-            <CourseManagementPage courses={courses} onUpdateCourse={updateCourse} onDeleteCourse={deleteCourse}/>
-          </ProtectedRoute>
-        }/>
-        <Route path="/course/:id/assessments" element={
-          <ProtectedRoute role="teacher">
-            <ManageAssessments courses={courses} onUpdateCourse={updateCourse}/>
-          </ProtectedRoute>
-        }/>
-      </Routes>
-    </Router>
-    </CoursesContext.Provider>
-  );
+                        <Route path="/student/*" element={
+                            <ProtectedRoute role="student">
+                                <StudentProfile />
+                            </ProtectedRoute>
+                        }/>
+
+                        <Route path="/teacher" element={
+                            <ProtectedRoute role="teacher">
+                                <TeacherPage courses={courses} onUpdateCourse={updateCourse} />
+                            </ProtectedRoute>
+                        }/>
+
+                        <Route path="/course/:id" element={
+                            <ProtectedRoute role="teacher">
+                                <CourseManagementPage
+                                    courses={courses}
+                                    onUpdateCourse={updateCourse}
+                                    onDeleteCourse={deleteCourse}
+                                />
+                            </ProtectedRoute>
+                        }/>
+
+                        <Route path="/course/:id/assessments" element={
+                            <ProtectedRoute role="teacher">
+                                <ManageAssessments
+                                    courses={courses}
+                                    onUpdateCourse={updateCourse}
+                                />
+                            </ProtectedRoute>
+                        }/>
+                    </Routes>
+                </Router>
+            </CoursesContext.Provider>
+        </ThemeProvider>
+    );
 }
 
 export default App;
