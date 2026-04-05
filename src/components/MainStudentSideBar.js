@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 function MainStudentSideBar() {
     const navigate = useNavigate();
     const handleLogout = () => {
-        navigate('/');
+        localStorage.removeItem('authUser');
+        navigate('/', { replace: true });
     };
 
     return (

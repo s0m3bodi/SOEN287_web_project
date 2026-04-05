@@ -38,8 +38,9 @@ function LoginPage () { //defines a component that does something
     if(isEmployee) {
       if (username===employeeInfo.username && password === employeeInfo.password){
         setError('');
+        localStorage.setItem('authUser', 'teacher');
         alert ('Login Successful!');
-        navigate('/teacher');
+        navigate('/teacher', { replace: true });
       }
       else{
         setError('Invalid username or password.');
@@ -48,8 +49,9 @@ function LoginPage () { //defines a component that does something
     else{
       if (username === studentInfo.username && password === studentInfo.password) { //checks if password right
       setError('');
+      localStorage.setItem('authUser', 'student');
       alert ('Login Successful!');
-      navigate('/student');
+      navigate('/student', { replace: true });
       }
       else {
        setError('Invalid username or password.');

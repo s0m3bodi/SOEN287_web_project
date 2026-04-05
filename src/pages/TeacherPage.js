@@ -17,7 +17,7 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
     };
 
     const addCourse = () => { //adds new course to array
-        const newId = courses.length > 0 ? Math.max(courses.map(course => course.id)) + 1 : 1; //resizes array to fit 1 more 
+        const newId = courses.length > 0 ? Math.max(...courses.map(course => course.id)) + 1 : 1; //resizes array to fit 1 more 
         const courseToAdd = { id: newId, ...newCourse, isActive: true, totalStudents: 300 }; //creates new array object then copies new course in it, sets active to true and total students to 300 by default
     
         onUpdateCourse(courseToAdd); //updates everything

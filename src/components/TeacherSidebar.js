@@ -4,7 +4,8 @@ import '../pagesCSS/TeacherSidebar.css'
 const TeacherSidebar = ({courses}) => {//courses are the hardcoded ones, onAddCourse is for the new ones
     const navigate = useNavigate();
     const handleLogout = () =>{
-        navigate('/');
+        localStorage.removeItem('authUser');
+        navigate('/', { replace: true });
     };
 
     return(

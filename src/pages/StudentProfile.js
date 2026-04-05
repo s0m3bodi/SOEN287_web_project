@@ -3,24 +3,16 @@ import MainStudentSideBar from '../components/MainStudentSideBar';
 import defaultPP from "../pages/defaultPP.jpeg"
 import '../pagesCSS/StudentCSS/StudentProfile.css';
 import { useState } from 'react';
+import { useCoursesContext } from '../context/CoursesContext';
 
-function Dashboard() {
-  const courses = [
-    { id: 1, name: "SOEN 287", average: 82 },
-    { id: 2, name: "COMP 249", average: 74 },
-    { id: 3, name: "SOEN 228", average: 84 },
-    { id: 4, name: "COMP 232", average: 98 }
-  ];
-
+function Dashboard({ enrolledCourses }) {
   const upcoming = [
     { id: 1, title: "Assignment 2", course: "SOEN 287", due: "March 10" },
     { id: 2, title: "Quiz 3", course: "COMP 248", due: "March 12" },
     { id: 3, title: "Lab Report", course: "SOEN 228", due: "March 17" }
   ];
 
-  const overall =
-    courses.reduce((sum, course) => sum + course.average, 0) /
-    courses.length;
+  const overall = 0; // placeholder until student grades are tracked
 
   const sectionStyle = {
     backgroundColor: "#f5f5f5",
@@ -66,11 +58,15 @@ function Dashboard() {
 
         <div style={sectionStyle}>
           <h3>My Courses</h3>
-          {courses.map((course) => (
-            <p key={course.id}>
-              {course.name} - {course.average}%
-            </p>
-          ))}
+          {enrolledCourses.length === 0 ? (
+            <p>No courses enrolled yet.</p>
+          ) : (
+            enrolledCourses.map((course) => (
+              <p key={course.id}>
+                {course.code} - {course.name}
+              </p>
+            ))
+          )}
         </div>
 
         <div style={sectionStyle}>
@@ -120,242 +116,149 @@ function Profile() {
     </div>
   );
 }
-function Courses(){ 
-   const [courses, setCourses] = useState([
-    {
-      code: "SOEN 287",
-      name: "Web Programming",
-      instructor: "Ulrich Smith",
-      term: "Winter 2026"
-    },
-    {
-      code: "COMP 249",
-      name: "Object-Oriented Programming II",
-      instructor: "Lee Chang",
-      term: "Winter 2026"
-    },
-    {
-      code: "MATH 205",
-      name: "Differential and Integral Calculus II",
-      instructor: "Brown Patel",
-      term: "Winter 2026"
+function Courses({ enrolledCourses, setEnrolledCourses }) {
+  const allCourses = useCoursesContext();
+  const [selected, setSelected] = useState("");
+
+  const available = allCourses.filter(
+    (c) => !enrolledCourses.some((e) => e.id === c.id)
+  );
+
+  const handleEnroll = () => {
+    if (!selected) return;
+    const course = allCourses.find((c) => c.id === parseInt(selected));
+    if (course) {
+      setEnrolledCourses([...enrolledCourses, course]);
+      setSelected("");
     }
-  ]);
-
-  const [form, setForm] = useState({
-    code: "",
-    name: "",
-    instructor: "",
-    term: ""
-  });
-
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    });
   };
 
-  const addCourse = (e) => {
-    e.preventDefault();
-
-    if (!form.code || !form.name) {
-      alert("Course code and name required");
-      return;
-    }
-
-    setCourses([...courses, form]);
-
-    setForm({
-      code: "",
-      name: "",
-      instructor: "",
-      term: ""
-    });
-  };
-
-  const deleteCourse = (index) => {
-    setCourses(courses.filter((_, i) => i !== index));
+  const handleDrop = (id) => {
+    setEnrolledCourses(enrolledCourses.filter((c) => c.id !== id));
   };
 
   return (
     <div className="details-section">
-
       <h2>My Courses</h2>
 
-      <form onSubmit={addCourse}>
-        <input
-          name="code"
-          placeholder="Course Code"
-          value={form.code}
-          onChange={handleChange}
-        />
+      <div style={{ marginBottom: "16px" }}>
+        <select value={selected} onChange={(e) => setSelected(e.target.value)}>
+          <option value="">-- Select a course to add --</option>
+          {available.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.code} - {c.name} ({c.term})
+            </option>
+          ))}
+        </select>
+        <button onClick={handleEnroll} disabled={!selected}>Add Course</button>
+      </div>
 
-        <input
-          name="name"
-          placeholder="Course Name"
-          value={form.name}
-          onChange={handleChange}
-        />
-
-        <input
-          name="instructor"
-          placeholder="Instructor"
-          value={form.instructor}
-          onChange={handleChange}
-        />
-
-        <input
-          name="term"
-          placeholder="Term"
-          value={form.term}
-          onChange={handleChange}
-        />
-
-        <button>Add Course</button>
-      </form>
-
-      {courses.map((c, index) => (
-        <div key={index} className="course-card">
-          <h3>{c.code}</h3>
-          <p>{c.name}</p>
-          <p>{c.instructor}</p>
-          <p>{c.term}</p>
-
-          <button onClick={() => deleteCourse(index)}>
-            Delete
-          </button>
-        </div>
-      ))}
-
+      {enrolledCourses.length === 0 ? (
+        <p>No courses enrolled yet.</p>
+      ) : (
+        enrolledCourses.map((c) => (
+          <div key={c.id} className="course-card">
+            <h3>{c.code}</h3>
+            <p>{c.name}</p>
+            <p>{c.term}</p>
+            <p>Status: {c.isActive ? "Active" : "Inactive"}</p>
+            <button onClick={() => handleDrop(c.id)}>Drop Course</button>
+          </div>
+        ))
+      )}
     </div>
   );
 }
 
 
 
-function Assessments() {
-  const [assessments, setAssessments] = useState([
-    {
-      id: 1,
-      course: "SOEN 287",
-      title: "Assignment 1",
-      earned: 85,
-      total: 100,
-      status: "Completed"
-    },
-    {
-      id: 2,
-      course: "SOEN 287",
-      title: "Lab 1",
-      earned: null,
-      total: 10,
-      status: "Pending"
-    },
-    {
-      id: 3,
-      course: "COMP 248",
-      title: "Midterm Exam",
-      earned: null,
-      total: 100,
-      status: "Pending"
-    }
-  ]);
-
-  const [editingId, setEditingId] = useState(null);
+function Assessments({ enrolledCourses }) {
+  // grades keyed by "courseId_assessmentIndex" so they persist across re-renders
+  const [grades, setGrades] = useState({});
+  const [editingKey, setEditingKey] = useState(null);
   const [editedEarned, setEditedEarned] = useState("");
 
-  function handleDelete(id) {
-    setAssessments(assessments.filter((item) => item.id !== id));
+  function handleEdit(key, currentEarned) {
+    setEditingKey(key);
+    setEditedEarned(currentEarned !== null ? currentEarned : "");
   }
 
-  function handleEdit(item) {
-    setEditingId(item.id);
-    setEditedEarned(item.earned !== null ? item.earned : "");
-  }
-
-  function handleSave(id) {
-    const updated = assessments.map((item) => {
-      if (item.id === id) {
-        const newEarned = editedEarned === "" ? null : Number(editedEarned);
-
-        return {
-          ...item,
-          earned: newEarned,
-          status: editedEarned !== "" ? "Completed" : "Pending"
-        };
+  function handleSave(key) {
+    const newEarned = editedEarned === "" ? null : Number(editedEarned);
+    setGrades({
+      ...grades,
+      [key]: {
+        earned: newEarned,
+        status: newEarned !== null ? "Completed" : "Pending"
       }
-      return item;
     });
-
-    setAssessments(updated);
-    setEditingId(null);
+    setEditingKey(null);
     setEditedEarned("");
   }
-
-  const grouped = assessments.reduce((acc, item) => {
-    if (!acc[item.course]) {
-      acc[item.course] = [];
-    }
-    acc[item.course].push(item);
-    return acc;
-  }, {});
 
   return (
     <div className="details-section">
       <h2>Assessments</h2>
 
-      {Object.keys(grouped).map((courseName) => (
-        <div key={courseName}>
-          <h3 style={{ marginTop: "30px" }}>{courseName}</h3>
+      {enrolledCourses.length === 0 ? (
+        <p>Enroll in a course to see its assessments.</p>
+      ) : (
+        enrolledCourses.map((course) => (
+          <div key={course.id}>
+            <h3 style={{ marginTop: "30px" }}>{course.code} - {course.name}</h3>
 
-          {grouped[courseName].map((item) => (
-            <div key={item.id} className="course-card">
-              <p><b>{item.title}</b></p>
+            {(!course.assessments || course.assessments.length === 0) ? (
+              <p>No assessments for this course yet.</p>
+            ) : (
+              course.assessments.map((assessment, index) => {
+                const key = `${course.id}_${index}`;
+                const grade = grades[key] || { earned: null, status: "Pending" };
 
-              {editingId === item.id ? (
-                <>
-                  <input
-                    type="number"
-                    value={editedEarned}
-                    onChange={(e) => setEditedEarned(e.target.value)}
-                    placeholder="Enter marks"
-                  />
-                  <button onClick={() => handleSave(item.id)}>Save</button>
-                </>
-              ) : (
-                <>
-                  {item.earned !== null ? (
-                    <p>{item.earned}/{item.total}</p>
-                  ) : (
-                    <p>Not graded yet</p>
-                  )}
+                return (
+                  <div key={key} className="course-card">
+                    <p><b>{assessment.type}</b></p>
+                    <p>Weight: {assessment.weight}%</p>
 
-                  <span
-                    className={
-                      item.status === "Completed"
-                        ? "status completed"
-                        : "status pending"
-                    }
-                  >
-                    {item.status}
-                  </span>
+                    {editingKey === key ? (
+                      <>
+                        <input
+                          type="number"
+                          value={editedEarned}
+                          onChange={(e) => setEditedEarned(e.target.value)}
+                          placeholder="Enter marks"
+                        />
+                        <button onClick={() => handleSave(key)}>Save</button>
+                      </>
+                    ) : (
+                      <>
+                        {grade.earned !== null ? (
+                          <p>{grade.earned}%</p>
+                        ) : (
+                          <p>Not graded yet</p>
+                        )}
 
-                  <br />
+                        <span
+                          className={
+                            grade.status === "Completed"
+                              ? "status completed"
+                              : "status pending"
+                          }
+                        >
+                          {grade.status}
+                        </span>
 
-                  <button onClick={() => handleEdit(item)}>Edit</button>
-                  <button
-                    className="delete"
-                    onClick={() => handleDelete(item.id)}
-                  >
-                    Delete
-                  </button>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      ))}
+                        <br />
+
+                        <button onClick={() => handleEdit(key, grade.earned)}>Edit</button>
+                      </>
+                    )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        ))
+      )}
     </div>
   );
 }
@@ -415,6 +318,20 @@ function Calendar() {
 }
 
 function StudentProfile() {
+  const [enrolledCourses, setEnrolledCourses] = useState(() => {
+    try {
+      const saved = localStorage.getItem("enrolledCourses");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const updateEnrolledCourses = (courses) => {
+    setEnrolledCourses(courses);
+    localStorage.setItem("enrolledCourses", JSON.stringify(courses));
+  };
+
   return (
     <div>
       <MainStudentSideBar />
@@ -428,11 +345,11 @@ function StudentProfile() {
         }}
       >
         <Routes>
-          <Route index element={<Dashboard />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route index element={<Dashboard enrolledCourses={enrolledCourses} />} />
+          <Route path="dashboard" element={<Dashboard enrolledCourses={enrolledCourses} />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="courses" element={<Courses />} />        
-          <Route path="assessments" element={<Assessments />} />
+          <Route path="courses" element={<Courses enrolledCourses={enrolledCourses} setEnrolledCourses={updateEnrolledCourses} />} />
+          <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} />} />
           <Route path="progress" element={<Progress />} />
           <Route path="calendar" element={<Calendar />} />
         </Routes>
