@@ -3,10 +3,10 @@ import MainStudentSideBar from '../components/MainStudentSideBar';
 import defaultPP from "../pages/defaultPP.jpeg"
 import '../pagesCSS/StudentCSS/StudentProfile.css';
 import '../pagesCSS/StudentCSS/Calendar.css';
-
+import { useTheme } from '../context/ThemeContext';
 import { useState } from 'react';
 import { useEffect } from 'react'; 
-
+import StudentCourseManagement from '../pages/StudentCourseManagement';
 // helper to get current student ID
 function getStudentId() {
   return localStorage.getItem("userId") || "Unknown";
@@ -817,8 +817,12 @@ const today = new Date();
                   
 
 function StudentProfile() {
+  const { theme, toggleTheme } = useTheme(); 
+  const [enrolledCourses, setEnrolledCourses] = useState(loadStudentData("enrolled_courses") || []);
+  const updateEnrolledCourses = (updated) => { setEnrolledCourses(updated); saveStudentData("enrolled_courses", updated); };
   return (
-     <div className={theme === "light" ? "light-section" : "dark-section"}>
+    <div>
+     {/* <div className={theme === "light" ? "light-section" : "dark-section"}>
       <button 
         onClick={toggleTheme}
         style={{
@@ -830,8 +834,8 @@ function StudentProfile() {
         }}
       >
         {theme === "dark" ? "Light Mode" : "Dark Mode"}
-      </button>
-      <MainStudentSideBar theme={theme}/>
+      </button> */}
+      <MainStudentSideBar />
 
       <div
         style={{
@@ -850,6 +854,7 @@ function StudentProfile() {
           <Route path="courses/:id" element={<StudentCourseManagement />} />
           <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} />} />
           <Route path="progress" element={<Progress />} />
+          <Route path="Calendar" element={<Calendar />} />
         </Routes>
       </div>
     </div>
