@@ -7,3 +7,5 @@ class profile{
         this.lastName = lastName;
     }
 }
+
+export default profile;

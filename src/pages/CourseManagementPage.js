@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import TeacherSidebar from "../components/TeacherSidebar";
 import '../pagesCSS/CourseManagement.css'
-import SecondaryTSidebar from "../components/SecondaryTNavbar";
+import SecondaryTNavbar from "../components/SecondaryTNavbar";
 //this page opens when click on a course in the side bar, it has a place to edit info and to add assessments
 
 const CourseManagementPage = ({ courses, onUpdateCourse, onDeleteCourse }) => { //says which array 
@@ -90,7 +90,7 @@ const CourseManagementPage = ({ courses, onUpdateCourse, onDeleteCourse }) => { 
                         </button>
                     </div>
                 </div>
-                <SecondaryTSidebar courseId={courseData.id} />
+                <SecondaryTNavbar courseId={courseData.id} />
                 <div className="course-info">
                     <h2>Course Info</h2>
                     <div className="course-info-components">

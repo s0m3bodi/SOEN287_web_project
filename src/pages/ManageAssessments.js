@@ -66,7 +66,7 @@ const ManageAssessments = ({ courses, onUpdateCourse }) => {
             if (i !== index){
                 return a;
             }
-            return new Assessment(a.type, a.namee, a.deadline, a.weight, !a.isActive);
+            return new Assessment(a.type, a.name, a.deadline, a.weight, !a.isActive);
         });
         setAssessments(updatedAssessments);
     };
@@ -165,7 +165,7 @@ const ManageAssessments = ({ courses, onUpdateCourse }) => {
                         Save Changes
                     </button>)
                 }
-                <button className="BackHome" onClick={() => navigate("/course/:id")}>Back to Home</button>
+                <button className="BackHome" onClick={() => navigate(`/course/${id}`)}>Back to Home</button>
             </main>
         </div>
     );

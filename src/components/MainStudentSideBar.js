@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useTheme } from "../context/ThemeContext";
 
-function MainStudentSideBar({theme}) {
+function MainStudentSideBar() {
     const navigate = useNavigate();
     const handleLogout = () => {
         localStorage.removeItem('authUser');
@@ -24,7 +23,7 @@ function MainStudentSideBar({theme}) {
             justifyContent: "space-between",
             overflowX: "hidden"
         }}>
-            <div className={theme === "light" ? "sidebar light-sidebar" : "sidebar dark-sidebar"}>
+            <div className="sidebar">
                 <h2>Home Page</h2>
 
                 <nav>

@@ -1,11 +1,12 @@
 import { Routes, Route} from 'react-router-dom';
 import MainStudentSideBar from '../components/MainStudentSideBar';
+import StudentCourseManagement from './StudentCourseManagement';
 import defaultPP from "../pages/defaultPP.jpeg"
 import '../pagesCSS/StudentCSS/StudentProfile.css';
 import '../pagesCSS/StudentCSS/Calendar.css';
 
 import { useState } from 'react';
-import { useEffect } from 'react'; 
+import { useEffect } from 'react';
 
 // helper to get current student ID
 function getStudentId() {
@@ -68,7 +69,7 @@ function saveStudentData(key, data) {
   localStorage.setItem(`${key}_${id}`, JSON.stringify(data));
 }
 
-function Dashboard({ theme }) {
+function Dashboard() {
 
   const [studentName, setStudentName] = useState("");
   const [courses, setCourses] = useState([]);
@@ -106,7 +107,7 @@ function Dashboard({ theme }) {
   };
 
   return (
-    <div className={`details-section ${theme === "light" ? "light-section" : "dark-section"}`}>
+    <div className="details-section">
       <h2>Hi {studentName} 👋</h2>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
@@ -818,20 +819,8 @@ const today = new Date();
 
 function StudentProfile() {
   return (
-     <div className={theme === "light" ? "light-section" : "dark-section"}>
-      <button 
-        onClick={toggleTheme}
-        style={{
-          position: "fixed",
-          top: "10px",
-          right: "10px",
-          padding: "8px 12px",
-          zIndex: 1000
-        }}
-      >
-        {theme === "dark" ? "Light Mode" : "Dark Mode"}
-      </button>
-      <MainStudentSideBar theme={theme}/>
+    <div>
+      <MainStudentSideBar />
 
       <div
         style={{
@@ -846,9 +835,8 @@ function StudentProfile() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />      
           <Route path="assessments" element={<Assessments />} />
-          <Route path="courses" element={<Courses enrolledCourses={enrolledCourses} setEnrolledCourses={updateEnrolledCourses} />} />
+          <Route path="courses" element={<Courses />} />
           <Route path="courses/:id" element={<StudentCourseManagement />} />
-          <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} />} />
           <Route path="progress" element={<Progress />} />
         </Routes>
       </div>
