@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import TeacherSidebar from "../components/TeacherSidebar";
 import '../pagesCSS/TeacherPage.css'
@@ -11,13 +11,34 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
     const [newCourse, setNewCourse] = useState({ code: '', name: '', term: '', assessments: [] }); //new courses
     const [showAddModal, setShowAddModal] = useState(false); //shows a menu when click on addcourse to add a course
     
+    const [teacher, setTeacher] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        id: ""
+    });
+
+    useEffect(() => {
+        const stored = localStorage.getItem("currentTeacher");
+        if (stored) {
+      const profile = JSON.parse(stored);
+      setTeacher({
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        id: profile.id,
+        email: profile.email
+      });
+    }
+  }, []);
+
+   
 
     const handleInputChange = (e) => { //handles the input for new courses (like set in java)
         setNewCourse({ ...newCourse, [e.target.name]: e.target.value }); 
     };
 
     const addCourse = () => { //adds new course to array
-        const newId = courses.length > 0 ? Math.max(...courses.map(course => course.id)) + 1 : 1; //resizes array to fit 1 more 
+        const newId = courses.length > 0 ? Math.max(courses.map(course => course.id)) + 1 : 1; //resizes array to fit 1 more 
         const courseToAdd = { id: newId, ...newCourse, isActive: true, totalStudents: 300 }; //creates new array object then copies new course in it, sets active to true and total students to 300 by default
     
         onUpdateCourse(courseToAdd); //updates everything
@@ -39,7 +60,26 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
         <div style={{ display: "flex", minHeight: "100vh" }}> {/*anything on style can be moved to future css file*/}
             <TeacherSidebar courses={courses}/> {/*courses={course} prints the array and onAddCourse={( ... makes the menu for adding a course show by setting it active*/}
             <main style={{ flex: 1 }}> {/* the filter goes though the array to only print the active ones on the main page*/}
+               
                 <h1>Courses</h1>
+                 {/* Teacher profile info */}
+        <div style={{
+          backgroundColor: "#f5f5f5",
+          padding: "12px 16px",
+          borderRadius: "8px",
+          marginBottom: "20px",
+          display: "inline-block"
+        }}>
+          <p style={{ margin: 0 }}>
+            <b>{teacher.firstName} {teacher.lastName}</b>
+          </p>
+          <p style={{ margin: 0, fontSize: "14px", color: "#555" }}>
+            Teacher ID: {teacher.id}
+          </p>
+          <p style={{ margin: 0, fontSize: "14px", color: "#555" }}>
+            Email: {teacher.email}
+          </p>
+        </div>
                 {/*menu for new course add */}
                 {!showAddModal ? (
                     <button id="add" onClick={() => setShowAddModal(true)}>
