@@ -60,7 +60,7 @@ function LoginPage () { //defines a component that does something
     if(isEmployee) {
       if (username===employeeInfo.username && password === employeeInfo.password){
         localStorage.setItem("userId", employeeInfo.id);
-        localStorage.setItem("userRole", "teacher");
+        localStorage.setItem("authUser", "teacher");
       const existingTeacher = localStorage.getItem("currentTeacher");
   if (existingTeacher) {
     const parsed = JSON.parse(existingTeacher);
@@ -83,7 +83,7 @@ const registeredTeachers = JSON.parse(localStorage.getItem("registeredTeachers")
     
       if (foundTeacher) {
   localStorage.setItem("userId", foundTeacher.id);
-  localStorage.setItem("userRole", "teacher");
+  localStorage.setItem("authUser", "teacher");
 
   const existingTeacher = localStorage.getItem("currentTeacher");
   if (existingTeacher) {
@@ -122,7 +122,7 @@ const registeredStudents = JSON.parse(localStorage.getItem("registeredStudents")
       const foundStudent = registeredStudents.find(s => s.username === username && s.password === password);
     if (foundStudent) {
   localStorage.setItem("userId", foundStudent.id);
-  localStorage.setItem("userRole", "student");
+  localStorage.setItem("authUser", "student");
 
   const existingStudent = localStorage.getItem("currentStudent");
   if (existingStudent) {
