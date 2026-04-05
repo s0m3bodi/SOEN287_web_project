@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TeacherSidebar from '../components/TeacherSidebar';
 import SecondaryTNavbar from '../components/SecondaryTNavbar';
 import Assessment from '../components/Assessment';
+import '../pagesCSS/ManageAssessments.css';
 
 const ManageAssessments = ({ courses, onUpdateCourse }) => {
     const { id } = useParams();
@@ -12,7 +13,6 @@ const ManageAssessments = ({ courses, onUpdateCourse }) => {
     const [course, setCourse] = useState(null);
     const [assessments, setAssessments] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
-    const [cardIndex, setCardIndex] = useState(null);
 
     useEffect(() => {
         const foundCourse = courses.find(e => e.id === Number(id)); // To find the course in the courses array using its id
@@ -35,6 +35,7 @@ const ManageAssessments = ({ courses, onUpdateCourse }) => {
             let aname = a.name;
             let deadline = a.deadline;
             let weight = a.weight;
+            let isActive = a.isActive;
 
             if (name === "type") {
                 type = value;
@@ -45,21 +46,29 @@ const ManageAssessments = ({ courses, onUpdateCourse }) => {
             } else if (name === "weight") {
                 weight = Number(value);
             }
-            return new Assessment(type, aname, deadline, weight);
+            return new Assessment(type, aname, deadline, weight, isActive);
         });
         setAssessments(updatedAssessments);
     };
 
     const addAssessment = () => { // to add a new assessment
         const newAssessment = new Assessment();
-        setAssessments([...assessments, newAssessment])
-        setCardIndex(assessments.length);
+        setAssessments([newAssessment, ...assessments])
         setIsEditing(true);
     };
 
     const deleteAssessment = (index) => { // to delete an assessment
         setAssessments(assessments.filter((a, i) => i !== index));
-        if (cardIndex === index) setCardIndex(null);
+    };
+
+    const toggleActive = (index) => {
+        const updatedAssessments = assessments.map((a, i) => {
+            if (i !== index){
+                return a;
+            }
+            return new Assessment(a.type, a.namee, a.deadline, a.weight, !a.isActive);
+        });
+        setAssessments(updatedAssessments);
     };
 
     const handleSaveChanges = () => { // to save changes made to an assessment
@@ -69,39 +78,52 @@ const ManageAssessments = ({ courses, onUpdateCourse }) => {
         };
         onUpdateCourse(updatedCourse);
         setIsEditing(false);
-        setCardIndex(null);
     };
 
-    if (!course) return <></>
+    if (!course) return <div>Course not found</div> // Prevent the site from breaking
     return (
         <div className="AssessPage">
-            <TeacherSidebar courses={courses}/>
-            <main className="mainAssesspage" style={{ flex: 1, padding: "20px"}}>
-                {!course && 
-                    <div>Course not found</div>}
+            <TeacherSidebar courses={courses} style={{margin: 0}}/>
+            <main className="mainAssessPage" style={{ flex: 1}}>
                 
+                <h1>Assessments Manager</h1>
                 <div className="AssessHeader">
-                    <h1>Assessments Manager</h1>
-                    <h2>{course.code}</h2>
-                    <h3>{course.name}</h3>
-            
-                    <button className="edit" onClick={() => setIsEditing(!isEditing)}>
-                        {isEditing ? "Stop Editing" : "Edit"}
-                    </button>
+                    <div>
+                        <h2>{course.code}</h2>
+                        <p>{course.name}</p>
+                        <p>{course.term}</p>
+                    </div>
+                    <div>
+                        <button className="edit" onClick={() => setIsEditing(!isEditing)}>
+                            {isEditing ? "Stop Editing" : "Edit"}
+                        </button>
+                    </div>
                 </div>
-                <SecondaryTNavbar courseId={course.id} />
-                <div>
-                    {assessments.map((a, index) => {
-                        const isOpenCard = cardIndex === index;
-                        return (
-                            <div key={index} onClick={() => isEditing && setCardIndex(isOpenCard ? null : index)}>
-                                <h3>{a.name || "Add name"}</h3>
 
-                                {isOpenCard && (
-                                    <div>
+                <SecondaryTNavbar courseId={course.id} />
+
+                <div className="AssessList">
+
+                    {isEditing && (
+                        <button className="AddAssessment" onClick={addAssessment}>
+                            Add Assessment +
+                        </button>
+                    )}
+
+                    {[...assessments].sort((a,b) => b.isActive - a.isActive).map((a) => {
+                        const realIndex = assessments.indexOf(a);
+                        return (
+                            <div key={realIndex} className={`AssessCard ${!a.isActive ? "inactive" : ""}`}>
+                                <div className="ClosedAssessCard">
+                                    <strong>{a.type || "New Assessment"} {a.name || ""} - ({a.weight}%)</strong>
+                                    <span> - Due: {a.deadline || "No deadline"}</span>
+                                </div>
+
+                                {isEditing && (
+                                    <div className="EditAssessCard">
                                         <label>
                                             Type:
-                                            <select name="type" value={a.type} onChange={(e) => handleAssignmentChange(index, e)}>
+                                            <select name="type" value={a.type} onChange={(e) => handleAssignmentChange(realIndex, e)}>
                                                 <option value="">Select type</option>
                                                 <option value="Assignment">Assignment</option>
                                                 <option value="Project">Project</option>
@@ -112,26 +134,38 @@ const ManageAssessments = ({ courses, onUpdateCourse }) => {
                                         </label>
                                         <label htmlFor="assessName">
                                             Name:
-                                            <input type="text" id="assessName" name="name" value={a.name} onChange={(e) => handleAssignmentChange(index, e)}/>
+                                            <input type="text" id="assessName" name="name" value={a.name} onChange={(e) => handleAssignmentChange(realIndex, e)}/>
                                         </label>
                                         <label htmlFor="assessDeadline">
                                             Deadline:
-                                            <input type="date" id="assessDeadline" name="deadline" value={a.deadline} onChange={(e) => handleAssignmentChange(index, e)}/>
+                                            <input type="date" id="assessDeadline" name="deadline" value={a.deadline} onChange={(e) => handleAssignmentChange(realIndex, e)}/>
                                         </label>
                                         <label htmlFor="assessWeight">
                                             Weight:
-                                            <input type="number" id="assessWeight" name="weight" value={a.weight} onChange={(e) => handleAssignmentChange(index, e)}/>
+                                            <input type="number" id="assessWeight" name="weight" value={a.weight} onChange={(e) => handleAssignmentChange(realIndex, e)}/>
                                         </label>
-                                        <button className="delete" onClick={() => deleteAssessment(index)}>Delete</button>
+                                        <div className="Editing-buttons">
+                                            <button className="activate" onClick={() => toggleActive(realIndex)}>
+                                                {a.isActive ? "Mark as Inactive" : "Mark as Active"}
+                                            </button>
+                                            <button className="Delete" onClick={() => deleteAssessment(realIndex)}>
+                                                Delete Assessment
+                                            </button>
+                                        </div>
+                                        
                                     </div>
                                 )}
                             </div>
                         );
                     })}
                 </div>
-                {isEditing && <button onClick={addAssessment}>Add Assessment</button>}
-                {isEditing && <button onClick={handleSaveChanges}>Save Changes</button>}
-                <button onClick={() => navigate("/course/:id")}>Back to Home</button>
+                
+                {isEditing && (
+                    <button className="SaveAssessment" onClick={handleSaveChanges}>
+                        Save Changes
+                    </button>)
+                }
+                <button className="BackHome" onClick={() => navigate("/course/:id")}>Back to Home</button>
             </main>
         </div>
     );

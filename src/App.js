@@ -5,6 +5,7 @@ import TeacherPage from "./pages/TeacherPage";
 import LoginPage from "./pages/LoginPage";
 import CourseManagementPage from "./pages/CourseManagementPage";
 import ManageAssessments from "./pages/ManageAssessments";
+import StudentProgress from "./pages/StudentProgression";
 import { courses as hardcodedCourses } from "./components/Data";
 import { CoursesContext } from "./context/CoursesContext";
 // import { ThemeProvider, useTheme } from './context/ThemeContext';
@@ -71,6 +72,14 @@ function App() {
                         <Route path="/course/:id/assessments" element={
                             <ProtectedRoute role="teacher">
                                 <ManageAssessments
+                                    courses={courses}
+                                    onUpdateCourse={updateCourse}
+                                />
+                            </ProtectedRoute>
+                        }/>
+                        <Route path="/course/:id/studentprogress" element={
+                            <ProtectedRoute role="teacher">
+                                <StudentProgress
                                     courses={courses}
                                     onUpdateCourse={updateCourse}
                                 />
