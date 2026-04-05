@@ -3,9 +3,12 @@ import MainStudentSideBar from '../components/MainStudentSideBar';
 import defaultPP from "../pages/defaultPP.jpeg"
 import '../pagesCSS/StudentCSS/StudentProfile.css';
 import '../pagesCSS/StudentCSS/Calendar.css';
-
+import { useTheme } from "../context/ThemeContext";
 import { useState } from 'react';
 import { useEffect } from 'react'; 
+import { useCoursesContext } from '../context/CoursesContext';
+import { useNavigate } from "react-router-dom";
+import StudentCourseManagement from "../pages/StudentCourseManagement";
 
 // helper to get current student ID
 function getStudentId() {
@@ -162,6 +165,7 @@ function Dashboard() {
 }
 
 function Profile() {
+  
   const [student, setStudent] = useState({
     firstName: "",
     lastName: "",
@@ -204,126 +208,96 @@ function Profile() {
     </div>
   );
 }
-function Courses(){ 
-   const [courses, setCourses] = useState([]);
-  const [loaded, setLoaded] = useState(false);
 
-    const [form, setForm] = useState({
-    code: "",
-    name: "",
-    instructor: "",
-    term: ""
-  });
+function Courses({ enrolledCourses, setEnrolledCourses }) {
+  const allCourses = useCoursesContext();
+  const [selected, setSelected] = useState("");
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setCourses(loadStudentData("enrolled_courses"));
-    setLoaded(true);
-  }, []);
+  // Courses not yet enrolled
+  const available = allCourses.filter(
+    (c) => !enrolledCourses.some((e) => e.id === c.id)
+  );
 
-  useEffect(() => {
-    if (loaded) {
-    saveStudentData("enrolled_courses", courses);
-    // sync dashboard_courses to match enrolled courses
-      const dashboardCourses = courses.map((c, index) => {
-        // keep existing average if course already exists in dashboard
-        const existing = loadStudentData("dashboard_courses");
-        const match = existing.find(d => d.name === c.code);
-        return {
-          id: index + 1,
-          name: c.code,
-          average: match ? match.average : 0
-        };
-      });
-      saveStudentData("dashboard_courses", dashboardCourses);
-    
+  // Add course
+  const handleEnroll = () => {
+    if (!selected) return;
+
+    const course = allCourses.find(
+      (c) => c.id === parseInt(selected)
+    );
+
+    if (course) {
+      setEnrolledCourses([...enrolledCourses, course]);
+      setSelected("");
     }
-  }, [courses, loaded]);
-
-
-  
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    });
   };
 
-  const addCourse = (e) => {
-    e.preventDefault();
-
-    if (!form.code || !form.name) {
-      alert("Course code and name required");
-      return;
-    }
-
-    setCourses([...courses, form]);
-
-    setForm({
-      code: "",
-      name: "",
-      instructor: "",
-      term: ""
-    });
-  };
-
-  const deleteCourse = (index) => {
-    setCourses(courses.filter((_, i) => i !== index));
+  // Remove course
+  const handleDrop = (id) => {
+    setEnrolledCourses(
+      enrolledCourses.filter((c) => c.id !== id)
+    );
   };
 
   return (
     <div className="details-section">
-
       <h2>My Courses</h2>
 
-      <form onSubmit={addCourse}>
-        <input
-          name="code"
-          placeholder="Course Code"
-          value={form.code}
-          onChange={handleChange}
-        />
+      {/* Add Course Section */}
+      <div style={{ marginBottom: "16px" }}>
+        <select
+          value={selected}
+          onChange={(e) => setSelected(e.target.value)}
+        >
+          <option value="">-- Select a course to add --</option>
+          {available.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.code} - {c.name} ({c.term})
+            </option>
+          ))}
+        </select>
 
-        <input
-          name="name"
-          placeholder="Course Name"
-          value={form.name}
-          onChange={handleChange}
-        />
+        <button
+          className="addcourse"
+          onClick={handleEnroll}
+          disabled={!selected}
+        >
+          Add Course
+        </button>
+      </div>
 
-        <input
-          name="instructor"
-          placeholder="Instructor"
-          value={form.instructor}
-          onChange={handleChange}
-        />
-
-        <input
-          name="term"
-          placeholder="Term"
-          value={form.term}
-          onChange={handleChange}
-        />
-
-        <button>Add Course</button>
-      </form>
-
-      {courses.length === 0 ? (
-        <p>No courses added yet.</p>
+      {/* Course List */}
+      {enrolledCourses.length === 0 ? (
+        <p>No courses enrolled yet.</p>
       ) : (
-      courses.map((c, index) => (
-        <div key={index} className="course-card">
-          <h3>{c.code}</h3>
-          <p>{c.name}</p>
-          <p>{c.instructor}</p>
-          <p>{c.term}</p>
+        enrolledCourses.map((c) => (
+          <div
+            key={c.id}
+            className="course-card"
+            onClick={() =>
+              navigate(`/student/courses/${c.id}`, {
+                state: { course: c },
+              })
+            }
+            style={{ cursor: "pointer" }}
+          >
+            <h3>{c.code}</h3>
+            <p>{c.name}</p>
+            <p>{c.term}</p>
+            <p>Status: {c.isActive ? "Active" : "Inactive"}</p>
 
-          <button onClick={() => deleteCourse(index)}>
-            Delete
-          </button>
-        </div>
-      ))
+            <button
+              onClick={(e) => {
+                e.stopPropagation(); // prevent navigation
+                handleDrop(c.id);
+              }}
+            >
+              Drop Course
+            </button>
+          </div>
+        ))
       )}
-
     </div>
   );
 }
@@ -688,6 +662,7 @@ const today = new Date();
                   
 
 function StudentProfile() {
+  const { theme, toggleTheme } = useTheme();
   return (
     <div>
       <MainStudentSideBar />
@@ -703,11 +678,12 @@ function StudentProfile() {
         <Routes>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="courses" element={<Courses />} />        
+          <Route path="profile" element={<Profile />} />      
           <Route path="assessments" element={<Assessments />} />
+          <Route path="courses" element={<Courses enrolledCourses={enrolledCourses} setEnrolledCourses={updateEnrolledCourses} />} />
+          <Route path="courses/:id" element={<StudentCourseManagement />} />
+          <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} />} />
           <Route path="progress" element={<Progress />} />
-          <Route path="calendar" element={<Calendar />} />
         </Routes>
       </div>
     </div>
