@@ -7,13 +7,7 @@
   margin-top: 10px;
 }
 
-.dashboard-card {
-  flex: 1 1 250px;
-  background-color: #f4f6f9;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
+
 
 /* Progress bar styling (also used in Progress page) */
 /* Progress bar with custom colors */
@@ -93,6 +87,7 @@
     object-fit: cover;
     margin-bottom: 15px;
     border: 3px solid #590016;
+    align-items: center;
 }
 
 .profile-section p {
@@ -119,13 +114,14 @@ form input {
 }
 
 /* Add course button */
-form button {
+button {
   background-color: #590016;
   color: white;
-  border: none;
+  border: black;
   padding: 8px 14px;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
+  
 }
 
 form button:hover {
@@ -152,27 +148,21 @@ form button:hover {
   margin: 4px 0;
 }
 
-/* Delete button */
-.course-card button {
-  margin-top: 8px;
-  background-color: #590016;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
+/* Dark Theme Section */
+.dark-section {
+  background-color: rgb(29, 28, 28); /* charcoal dark gray, less harsh than black */
+  color: white; 
+  
+}
+.dark-section .course-card {
+  color: black; /* Inside cards in dark mode stays black */
 }
 
-.course-card button:hover {
-  background-color: #590016;
+.dark-section .dashboard-card{
+  color: black; /* Inside cards in dark mode stays black */
+}
+.dark-section .profile-section {
+  color: black; /* Inside cards in dark mode stays black */
 }
 
-.addcourse{
-  background-color: #590016;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 20px;
-}
+
