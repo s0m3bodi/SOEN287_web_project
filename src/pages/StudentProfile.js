@@ -672,6 +672,18 @@ function StudentProfile() {
   };
   return (
      <div className={theme === "light" ? "light-theme" : "dark-theme"}>
+      <button 
+        onClick={toggleTheme}
+        style={{
+          position: "fixed",
+          top: "10px",
+          right: "10px",
+          padding: "8px 12px",
+          zIndex: 1000
+        }}
+      >
+        {theme === "dark" ? "Light Mode" : "Dark Mode"}
+      </button>
       <MainStudentSideBar />
 
       <div
@@ -683,14 +695,14 @@ function StudentProfile() {
         }}
       >
         <Routes>
-          <Route index element={<Dashboard />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="profile" element={<Profile />} />      
-          <Route path="assessments" element={<Assessments />} />
-          <Route path="courses" element={<Courses enrolledCourses={enrolledCourses} setEnrolledCourses={updateEnrolledCourses} />} />
-          <Route path="courses/:id" element={<StudentCourseManagement />} />
-          <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} />} />
-          <Route path="progress" element={<Progress />} />
+          <Route index element={<Dashboard theme={theme}/>} />
+          <Route path="dashboard" element={<Dashboard theme={theme}/>} />
+          <Route path="profile" element={<Profile theme={theme}/>} />      
+          {/* <Route path="assessments" element={<Assessments theme={theme}/>} /> */}
+          <Route path="courses" element={<Courses enrolledCourses={enrolledCourses} setEnrolledCourses={updateEnrolledCourses} theme={theme}/>} />
+          <Route path="courses/:id" element={<StudentCourseManagement theme={theme}/>} />
+          <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} theme={theme}/>} />
+          <Route path="progress" element={<Progress theme={theme}/>} />
           <Route path="Calendar" element={<Calendar />} />
         </Routes>
       </div>
