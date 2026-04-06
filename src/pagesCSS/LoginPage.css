@@ -13,11 +13,7 @@
   color: #fff;
   margin-bottom: 20px;
 }
-.login-page h3 {
-  text-align: center;
-  color: #fff;
-  margin-bottom: 20px;
-}
+
 .Fill1 {
   margin-bottom: 5px;
   text-align: center;
@@ -62,78 +58,53 @@
     font-size: 16px;
     
 }
-.employee-Toggle {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    margin-left: 225px;
-    
+
+.loginButton:hover {
+  background-color: #c45570;
 }
 
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-
+/* ── segmented role toggle ── */
+.role-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+.role-toggle-track {
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 50px;
+  padding: 4px;
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.slider{
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ffffff;
-    -webkit-transition: .4s;
-    transition: .4s;
-    border-radius: 34px;
-    width: 150px;
-    text-align: left;
-    padding-left: 5px;
-    line-height: 35px;
-    color:#A9445A;   
-    
+.role-toggle-option {
+  padding: 8px 28px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+  user-select: none;
+  border: none;
+  background: none;
+  outline: none;
 }
 
-.slider:before {
-    position: absolute;
-    
-    height: 26px;
-    width: 75px;
-    left: 4px;
-    bottom: 4px;
-    background-color: #A9445A;
-     -webkit-transition: .4s;
-    transition: .4s;
-    border-radius: 34px;
-    content: "Student";
-    color:#ffffff;
-    text-align: center;
-    line-height: 26px;
+.role-toggle-option.active {
+  background-color: #fff;
+  color: #590016;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
-input:checked + .slider {
-    background-color:#ffffff;
-    line-height: 35px;
-    color:#B85C6A;
+.role-toggle-option:not(.active):hover {
+  color: rgba(255, 255, 255, 0.85);
 }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-input:checked + .slider:before {
-    -webkit-transform: translateX(75px);
-    -ms-transform: translateX(75px);
-    transform: translateX(75px);
-    background-color: #A9445A;
-    color:#ffffff;
-    
+.role-icon {
+  margin-right: 6px;
+  font-size: 15px;
 }
