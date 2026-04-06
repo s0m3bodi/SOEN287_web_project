@@ -100,3 +100,74 @@ button:active {
     background-color: #590016;
     color: white;
 }
+
+/* Theme styles */
+.theme-light {
+    background-color: #fff;
+    color: #000;
+}
+
+.theme-light .course {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+.theme-light .course h2 {
+    color: black;
+}
+
+.theme-light .addMenu {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+.theme-light .new-courseinfo input {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ddd;
+}
+
+.theme-light .teacher-profile-box {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+/* Dark mode */
+.theme-dark {
+    background-color: #333;
+    color: #fff;
+}
+
+.theme-dark .course {
+    background-color: #444;
+    border: 1px solid #666;
+}
+
+.theme-dark .course h2 {
+    color: white;
+}
+
+.theme-dark .addMenu {
+    background-color: #444;
+    border: 1px solid #666;
+}
+
+.theme-dark .new-courseinfo input {
+    background-color: #555;
+    color: #fff;
+    border: 1px solid #666;
+}
+
+.theme-dark .teacher-profile-box {
+    background-color: #444;
+    border: 1px solid #666;
+}
+
+.theme-toggle-btn {
+    background-color: #590016;
+    color: white;
+    border: 1px solid black;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+}

@@ -4,7 +4,7 @@ import StudentCourseManagement from './StudentCourseManagement';
 import defaultPP from "../pages/defaultPP.jpeg"
 import '../pagesCSS/StudentCSS/StudentProfile.css';
 import '../pagesCSS/StudentCSS/Calendar.css';
-// import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../context/ThemeContext';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
@@ -919,10 +919,9 @@ function StudentProfile() {
     setEnrolledCourses(updated);
     saveStudentData("enrolled_courses", updated);
   };
-  // const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   return (
-    <div>
-     {/* <div className={theme === "light" ? "light-section" : "dark-section"}>
+    <div className={theme === "light" ? "light-section" : "dark-section"}>
       <button 
         onClick={toggleTheme}
         style={{
@@ -934,7 +933,7 @@ function StudentProfile() {
         }}
       >
         {theme === "dark" ? "Light Mode" : "Dark Mode"}
-      </button> */}
+      </button>
       <MainStudentSideBar />
 
       <div

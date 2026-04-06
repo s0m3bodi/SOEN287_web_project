@@ -112,4 +112,37 @@
     margin-bottom: 5px;
 }
 
+/* Theme styles */
+.theme-light {
+    background-color: #fff;
+    color: #000;
+}
+
+.theme-light .Header {
+    background-color: #f9f9f9;
+    border: solid 1px #ddd;
+}
+
+.theme-light .course-info input {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid lightgrey;
+}
+
+.theme-dark {
+    background-color: #333;
+    color: #fff;
+}
+
+.theme-dark .Header {
+    background-color: #444;
+    border: solid 1px #666;
+}
+
+.theme-dark .course-info input {
+    background-color: #555;
+    color: #fff;
+    border: 1px solid #666;
+}
+
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import TeacherSidebar from "../components/TeacherSidebar";
+import { useTheme } from '../context/ThemeContext';
 import '../pagesCSS/CourseManagement.css'
 import SecondaryTNavbar from "../components/SecondaryTNavbar";
 //this page opens when click on a course in the side bar, it has a place to edit info and to add assessments
@@ -8,6 +9,7 @@ import SecondaryTNavbar from "../components/SecondaryTNavbar";
 const CourseManagementPage = ({ courses, onUpdateCourse, onDeleteCourse }) => { //says which array 
     const { id } = useParams(); //this grabs the ids used on key to know which course was clicked on
     const navigate = useNavigate(); //to go to another page
+    const { theme } = useTheme();
     
     const [courseData, setCourseData] = useState({ // had to set a default state otherwise .map generates runtime error
         code: "",
@@ -74,7 +76,7 @@ const CourseManagementPage = ({ courses, onUpdateCourse, onDeleteCourse }) => { 
 
 
     return (
-        <div className="course-manager" style={{display: "flex", minHeight: "100vh", padding: 0}}> {/*print a header with the course name and boxes with the current info that can be edited*/}
+        <div className={`theme-${theme} course-manager`} style={{display: "flex", minHeight: "100vh", padding: 0}}> {/*print a header with the course name and boxes with the current info that can be edited*/}
             <TeacherSidebar courses={courses} style={{margin: 0}}/>
             <main style={{flex: 1}}>
                 <h1>Course Manager</h1>

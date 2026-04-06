@@ -165,4 +165,10 @@ form button:hover {
   color: black; /* Inside cards in dark mode stays black */
 }
 
+/* Light Theme Section */
+.light-section {
+  background-color: white;
+  color: black;
+}
+
 

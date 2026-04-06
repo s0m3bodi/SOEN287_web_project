@@ -8,7 +8,7 @@ import ManageAssessments from "./pages/ManageAssessments";
 import StudentProgress from "./pages/StudentProgression";
 import { courses as hardcodedCourses } from "./components/Data";
 import { CoursesContext } from "./context/CoursesContext";
-// import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 // Protected route for role-based access
 const ProtectedRoute = ({ role, children }) => {
@@ -47,7 +47,7 @@ function App() {
     };
 
     return (
-        
+        <ThemeProvider>
             <CoursesContext.Provider value={courses}>
                 <Router>
                      
@@ -95,7 +95,7 @@ function App() {
                     </Routes>
                 </Router>
             </CoursesContext.Provider>
-       
+        </ThemeProvider>
     );
 }
 // Optional: Dark/Light Mode Toggle Button
