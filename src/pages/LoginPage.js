@@ -196,8 +196,27 @@ const registeredStudents = JSON.parse(localStorage.getItem("registeredStudents")
   };
   
    if (showRegister) {
-  return (<div className="login-page">
-        <h2>Create a {isEmployee ? "Teacher" : "Student"} Account</h2>
+  return (
+  <div className="login-page">
+    <h2>Create a {isEmployee ? "Teacher" : "Student"} Account</h2>
+
+      {/* role toggle on register page too */}
+        <div className="role-toggle">
+          <div className="role-toggle-track">
+            <button
+              className={`role-toggle-option ${!isEmployee ? "active" : ""}`}
+              onClick={() => { setIsEmployee(false); setRegError(''); }}
+            >
+              <span className="role-icon">🎓</span>Student
+            </button>
+            <button
+              className={`role-toggle-option ${isEmployee ? "active" : ""}`}
+              onClick={() => { setIsEmployee(true); setRegError(''); }}
+            >
+              <span className="role-icon">🏫</span>Employee
+            </button>
+          </div>
+          </div>
 
         <div className="Fill1">
           <input
@@ -265,22 +284,28 @@ const registeredStudents = JSON.parse(localStorage.getItem("registeredStudents")
       </div>
     );
   }
+
+
   return (
     <div className="login-page"> 
       <h2>Login to your Smart Course Companion</h2>
-      <h3>{isEmployee ? "Employee's Login" : "Student's Login"}</h3>
-      <div className="employee-Toggle">
-        <label className="switch">
-          <input
-          type="checkbox"
-          checked={isEmployee}
-          onChange={() => setIsEmployee(!isEmployee)}
-        />
-        <span className="slider">Employee Employee</span>
-       
-       
-        </label>
-       
+      
+       {/* new segmented toggle */}
+      <div className="role-toggle">
+        <div className="role-toggle-track">
+          <button
+            className={`role-toggle-option ${!isEmployee ? "active" : ""}`}
+            onClick={() => { setIsEmployee(false); setError(''); }}
+          >
+            <span className="role-icon">🎓</span>Student
+          </button>
+          <button
+            className={`role-toggle-option ${isEmployee ? "active" : ""}`}
+            onClick={() => { setIsEmployee(true); setError(''); }}
+          >
+            <span className="role-icon">🏫</span>Employee
+          </button>
+        </div>
       </div>
 
       <div className = "Fill1"> {/*box for username */}
