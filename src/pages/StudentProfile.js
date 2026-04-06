@@ -320,20 +320,17 @@ const handleCancel = () => {
   );
 }
 
-function Courses(){ 
-   const [courses, setCourses] = useState([]);
+function Courses(){
+  const [courses, setCourses] = useState([]);
   const [loaded, setLoaded] = useState(false);
-
-    const [form, setForm] = useState({
-    code: "",
-    name: "",
-    instructor: "",
-    term: ""
-  });
+  const [availableCourses, setAvailableCourses] = useState([]);
+  const [selectedCourseId, setSelectedCourseId] = useState("");
 
   useEffect(() => {
     setCourses(loadStudentData("enrolled_courses"));
     setLoaded(true);
+    const stored = localStorage.getItem("teacherCourses");
+    if (stored) setAvailableCourses(JSON.parse(stored));
   }, []);
 
   useEffect(() => {
@@ -351,35 +348,37 @@ function Courses(){
         };
       });
       saveStudentData("dashboard_courses", dashboardCourses);
-    
     }
   }, [courses, loaded]);
 
-
-  
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const addCourse = (e) => {
-    e.preventDefault();
-
-    if (!form.code || !form.name) {
-      alert("Course code and name required");
+  const enrollInCourse = (teacherCourse) => {
+    if (courses.find(c => c.code === teacherCourse.code)) {
+      alert("You are already enrolled in this course.");
       return;
     }
 
-    setCourses([...courses, form]);
-
-    setForm({
-      code: "",
-      name: "",
+    const newEnrolled = {
+      code: teacherCourse.code,
+      name: teacherCourse.name,
       instructor: "",
-      term: ""
-    });
+      term: teacherCourse.term
+    };
+    setCourses([...courses, newEnrolled]);
+
+    // pre-populate assessments from the teacher course
+    if (teacherCourse.assessments && teacherCourse.assessments.length > 0) {
+      const existingAssessments = loadStudentData("assessments");
+      const maxId = existingAssessments.length > 0 ? Math.max(...existingAssessments.map(a => a.id)) : 0;
+      const newAssessments = teacherCourse.assessments.map((a, i) => ({
+        id: maxId + i + 1,
+        course: teacherCourse.code,
+        title: a.type,
+        earned: null,
+        total: 100,
+        status: "Pending"
+      }));
+      saveStudentData("assessments", [...existingAssessments, ...newAssessments]);
+    }
   };
 
   const deleteCourse = (index) => {
@@ -399,58 +398,55 @@ function Courses(){
 
   };
 
+  const unenrolledCourses = availableCourses.filter(
+    c => c.isActive && !courses.find(e => e.code === c.code)
+  );
+
+  const handleEnroll = () => {
+    if (!selectedCourseId) return;
+    const course = availableCourses.find(c => c.id === Number(selectedCourseId));
+    if (course) {
+      enrollInCourse(course);
+      setSelectedCourseId("");
+    }
+  };
+
   return (
     <div className="details-section">
 
+      <h2>Enroll in a Course</h2>
+      <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "20px" }}>
+        <select
+          value={selectedCourseId}
+          onChange={e => setSelectedCourseId(e.target.value)}
+        >
+          <option value="">-- Select a course --</option>
+          {unenrolledCourses.map(c => (
+            <option key={c.id} value={c.id}>
+              {c.code} — {c.name} ({c.term})
+            </option>
+          ))}
+        </select>
+        <button onClick={handleEnroll} disabled={!selectedCourseId}>
+          Enroll
+        </button>
+      </div>
+
       <h2>My Courses</h2>
-
-      <form onSubmit={addCourse}>
-        <input
-          name="code"
-          placeholder="Course Code"
-          value={form.code}
-          onChange={handleChange}
-        />
-
-        <input
-          name="name"
-          placeholder="Course Name"
-          value={form.name}
-          onChange={handleChange}
-        />
-
-        <input
-          name="instructor"
-          placeholder="Instructor"
-          value={form.instructor}
-          onChange={handleChange}
-        />
-
-        <input
-          name="term"
-          placeholder="Term"
-          value={form.term}
-          onChange={handleChange}
-        />
-
-        <button>Add Course</button>
-      </form>
-
       {courses.length === 0 ? (
-        <p>No courses added yet.</p>
+        <p>No courses enrolled yet.</p>
       ) : (
-      courses.map((c, index) => (
-        <div key={index} className="course-card">
-          <h3>{c.code}</h3>
-          <p>{c.name}</p>
-          <p>{c.instructor}</p>
-          <p>{c.term}</p>
-
-          <button onClick={() => deleteCourse(index)}>
-            Delete
-          </button>
-        </div>
-      ))
+        courses.map((c, index) => (
+          <div key={index} className="course-card">
+            <h3>{c.code}</h3>
+            <p>{c.name}</p>
+            {c.instructor && <p>{c.instructor}</p>}
+            <p>{c.term}</p>
+            <button onClick={() => deleteCourse(index)}>
+              Unenroll
+            </button>
+          </div>
+        ))
       )}
 
     </div>
@@ -817,9 +813,7 @@ const today = new Date();
                   
 
 function StudentProfile() {
-  // const { theme, toggleTheme } = useTheme(); 
-  const [enrolledCourses, setEnrolledCourses] = useState(loadStudentData("enrolled_courses") || []);
-  const updateEnrolledCourses = (updated) => { setEnrolledCourses(updated); saveStudentData("enrolled_courses", updated); };
+  // const { theme, toggleTheme } = useTheme();
   return (
     <div>
      {/* <div className={theme === "light" ? "light-section" : "dark-section"}>

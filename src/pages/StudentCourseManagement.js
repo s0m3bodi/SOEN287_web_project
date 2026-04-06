@@ -1,16 +1,15 @@
 // StudentCourseManagement.jsx
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { courses } from "../components/Data.js";
 import "../pagesCSS/StudentCSS/StudentProfile.css"; // reuse your CSS
-import {useLocation } from "react-router-dom";
 
 function StudentCourseManagement() {
   const { id } = useParams();
-const location = useLocation();
+  const location = useLocation();
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
-  const course = location.state?.course || courses.find(c => c.id === Number(id));
+  const teacherCourses = JSON.parse(localStorage.getItem("teacherCourses") || "[]");
+  const course = location.state?.course || teacherCourses.find(c => c.id === Number(id));
 
   if (!course) {
     return <h2>Course not found</h2>;

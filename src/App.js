@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import StudentProfile from "./pages/StudentProfile";
 import TeacherPage from "./pages/TeacherPage";
@@ -20,7 +20,14 @@ const ProtectedRoute = ({ role, children }) => {
 
 
 function App() {
-    const [courses, setCourses] = useState(hardcodedCourses); // Initiate courses
+    const [courses, setCourses] = useState(() => {
+        const stored = localStorage.getItem("teacherCourses");
+        return stored ? JSON.parse(stored) : hardcodedCourses;
+    });
+
+    useEffect(() => {
+        localStorage.setItem("teacherCourses", JSON.stringify(courses));
+    }, [courses]);
 
     const updateCourse = (updatedCourse) => {
         setCourses(prevCourses => {
