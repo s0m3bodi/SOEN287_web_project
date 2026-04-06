@@ -6,6 +6,7 @@ import '../pagesCSS/StudentCSS/StudentProfile.css';
 import '../pagesCSS/StudentCSS/Calendar.css';
 // import { useTheme } from '../context/ThemeContext';
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 // helper to get current student ID
 function getStudentId() {
@@ -352,6 +353,7 @@ function Courses(){
   const [loaded, setLoaded] = useState(false);
   const [availableCourses, setAvailableCourses] = useState([]);
   const [selectedCourseId, setSelectedCourseId] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     setCourses(loadStudentData("enrolled_courses"));
@@ -464,7 +466,16 @@ function Courses(){
         <p>No courses enrolled yet.</p>
       ) : (
         courses.map((c, index) => (
-          <div key={index} className="course-card">
+          <div
+            key={index}
+            className="course-card"
+            onClick={() =>
+              navigate(`/student/courses/${c.code}`, {
+                state: { course: c }
+              })
+            }
+            style={{ cursor: "pointer" }}
+          >
             <h3>{c.code}</h3>
             <p>{c.name}</p>
             {c.instructor && <p>{c.instructor}</p>}
