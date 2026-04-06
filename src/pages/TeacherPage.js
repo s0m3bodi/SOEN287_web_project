@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import TeacherSidebar from "../components/TeacherSidebar";
+import { useTheme } from '../context/ThemeContext';
 import '../pagesCSS/TeacherPage.css'
 
 //the on update is important so when something is changed it also shows on the homepage and side bar
@@ -11,6 +12,8 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
    
     const [newCourse, setNewCourse] = useState({ code: '', name: '', term: '', assessments: [] }); //new courses
     const [showAddModal, setShowAddModal] = useState(false); //shows a menu when click on addcourse to add a course
+    
+    const { theme, toggleTheme } = useTheme();
     
     const [teacher, setTeacher] = useState({
         firstName: "",
@@ -119,10 +122,12 @@ const [unsaved, setUnsaved] = useState(false);
 
 
     return (
-        <div style={{ display: "flex", minHeight: "100vh" }}> {/*anything on style can be moved to future css file*/}
+        <div className={`theme-${theme}`} style={{ display: "flex", minHeight: "100vh" }}> {/*anything on style can be moved to future css file*/}
             <TeacherSidebar courses={courses}/> {/*courses={course} prints the array and onAddCourse={( ... makes the menu for adding a course show by setting it active*/}
-            <main style={{ flex: 1 }}> {/* the filter goes though the array to only print the active ones on the main page*/}
-               
+            <main style={{ flex: 1, position: 'relative' }}> {/* the filter goes though the array to only print the active ones on the main page*/}
+                <button className="theme-toggle-btn" onClick={toggleTheme} style={{ position: 'absolute', top: '10px', right: '10px' }}>
+                    Toggle Theme
+                </button>
                 <h1>Courses</h1>
                  {/* Teacher profile info */}
         <div className="teacher-profile-box">
