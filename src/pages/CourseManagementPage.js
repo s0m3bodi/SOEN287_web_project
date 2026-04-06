@@ -50,6 +50,8 @@ const CourseManagementPage = ({ courses, onUpdateCourse, onDeleteCourse }) => { 
         setCourseData({ ...courseData, isActive: !courseData.isActive });
     };
 
+   
+
     const handleSaveChanges = () => { //saves changes and goes back to teacher homepage
         onUpdateCourse(courseData);
         setIsEditing(false);
@@ -114,8 +116,7 @@ const CourseManagementPage = ({ courses, onUpdateCourse, onDeleteCourse }) => { 
                     </button>
                 </div>
                 
-                
-                <div className="end-buttons">
+                 <div className="end-buttons">
                     {/*Button to delete course, asks for confirmation */}
                     <button onClick={() => {
                         if (window.confirm(`Delete course "${courseData.name}"?`)){

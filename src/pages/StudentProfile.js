@@ -8,7 +8,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { calculateOverallGPA, calculateCourseGPA } from '../utils/gpaCalculator';
-
+import { useCoursesContext } from '../context/CoursesContext';
 // helper to get current student ID
 function getStudentId() {
   return localStorage.getItem("userId") || "Unknown";
@@ -360,18 +360,19 @@ const handleCancel = () => {
 }
 
 function Courses(){
+  const allTeacherCourses = useCoursesContext();
   const [courses, setCourses] = useState([]);
   const [loaded, setLoaded] = useState(false);
-  const [availableCourses, setAvailableCourses] = useState([]);
+  
   const [selectedCourseId, setSelectedCourseId] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     setCourses(loadStudentData("enrolled_courses"));
     setLoaded(true);
-    const stored = localStorage.getItem("teacherCourses");
-    if (stored) setAvailableCourses(JSON.parse(stored));
-  }, []);
+     }, []);
+    
+  
 
   useEffect(() => {
     if (loaded) {
@@ -439,13 +440,13 @@ function Courses(){
 
   };
 
-  const unenrolledCourses = availableCourses.filter(
+  const unenrolledCourses = allTeacherCourses.filter(
     c => c.isActive && !courses.find(e => e.code === c.code)
   );
 
   const handleEnroll = () => {
     if (!selectedCourseId) return;
-    const course = availableCourses.find(c => c.id === Number(selectedCourseId));
+    const course = allTeacherCourses.find(c => c.id === Number(selectedCourseId));
     if (course) {
       enrollInCourse(course);
       setSelectedCourseId("");
@@ -493,20 +494,14 @@ function Courses(){
             {c.instructor && <p>{c.instructor}</p>}
             <p>{c.term}</p>
             <button onClick={(e) => {
-              e.stopPropagation();
-              deleteCourse(index);
-              const confirmDelete = window.confirm(
-                  "Are you sure you want to unenroll from this course?"
-                );
-
-                if (!confirmDelete) return;
-
-                deleteCourse(index);
-
-                alert(`You have been unenrolled from ${c.code}`);
-            }}>
-              Unenroll
-            </button>
+            e.stopPropagation();
+            const confirmDelete = window.confirm("Are you sure you want to unenroll from this course?");
+            if (!confirmDelete) return;
+             deleteCourse(index);
+            alert(`You have been unenrolled from ${c.code}`);
+          }}>
+    Unenroll
+</button>
           </div>
         ))
       )}
