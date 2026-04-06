@@ -106,3 +106,46 @@
     display: flex;
     gap: 10px;
 }
+
+/* Theme styles */
+.theme-light {
+    background-color: #fff;
+    color: #000;
+}
+
+.theme-light .AssessHeader {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+.theme-light .AssessCard {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+.theme-light .EditAssessCard input, .theme-light .EditAssessCard select {
+    background-color: white;
+    color: #000;
+    border: 1px solid #ddd;
+}
+
+.theme-dark {
+    background-color: #333;
+    color: #fff;
+}
+
+.theme-dark .AssessHeader {
+    background-color: #444;
+    border: 1px solid #666;
+}
+
+.theme-dark .AssessCard {
+    background-color: #444;
+    border: 1px solid #666;
+}
+
+.theme-dark .EditAssessCard input, .theme-dark .EditAssessCard select {
+    background-color: #555;
+    color: #fff;
+    border: 1px solid #666;
+}
