@@ -7,6 +7,7 @@ import '../pagesCSS/StudentCSS/Calendar.css';
 import { useTheme } from '../context/ThemeContext';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import { calculateOverallGPA, calculateCourseGPA } from '../utils/gpaCalculator';
 
 // helper to get current student ID
 function getStudentId() {
@@ -95,6 +96,8 @@ function Dashboard() {
       ? courses.reduce((sum, course) => sum + course.average, 0) / courses.length
       : 0;
 
+  const overallGPA = calculateOverallGPA(courses);
+
   const sectionStyle = {
     backgroundColor: "#f5f5f5",
     padding: "15px",
@@ -159,6 +162,11 @@ function Dashboard() {
           
           <h3>Overall Average</h3>
           <CircularProgressBar percentage={overall} />
+          <div style={{ textAlign: "center", marginTop: "15px" }}>
+            <p style={{ fontSize: "18px", margin: "5px 0" }}>
+              <strong>GPA: {overallGPA}/4.3</strong>
+            </p>
+          </div>
         </div>
         </div>
         <div className='dashboard-card'>
@@ -167,11 +175,14 @@ function Dashboard() {
           {courses.length === 0 ? (
             <p>No courses enrolled.</p>
           ) : (
-           courses.map((course) => (
-            <p key={course.id}>
-              {course.name} - {course.average}%
-            </p>
-          ))
+           courses.map((course) => {
+             const courseGPA = calculateCourseGPA(course.average);
+             return (
+              <p key={course.id}>
+                {course.name} - {course.average}% | GPA: {courseGPA.gpaPoint} ({courseGPA.letterGrade})
+              </p>
+            );
+           })
         )}
         </div>
         </div>
