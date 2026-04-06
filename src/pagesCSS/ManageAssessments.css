@@ -144,8 +144,17 @@
     border: 1px solid #666;
 }
 
-.theme-dark .EditAssessCard input, .theme-dark .EditAssessCard select {
-    background-color: #555;
-    color: #fff;
-    border: 1px solid #666;
+.theme-light .mainAssessPage h1 {
+    background-color: #590016;
+    color: white;
+}
+
+.theme-dark .mainAssessPage h1 {
+    background-color: #444;
+    color: white;
+}
+
+.theme-dark .EditAssessCard input:focus, .theme-dark .EditAssessCard select:focus {
+    background-color: #666;
+    border: 1px solid #ccc;
 }
