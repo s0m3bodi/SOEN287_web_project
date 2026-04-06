@@ -394,7 +394,7 @@ function Courses(){
     };
     setCourses([...courses, newEnrolled]);
     alert(`Successfully enrolled in ${teacherCourse.code} - ${teacherCourse.name}`);
-    
+
     // pre-populate assessments from the teacher course
     if (teacherCourse.assessments && teacherCourse.assessments.length > 0) {
       const existingAssessments = loadStudentData("assessments");
@@ -481,7 +481,19 @@ function Courses(){
             <p>{c.name}</p>
             {c.instructor && <p>{c.instructor}</p>}
             <p>{c.term}</p>
-            <button onClick={() => deleteCourse(index)}>
+            <button onClick={(e) => {
+              e.stopPropagation();
+              deleteCourse(index);
+              const confirmDelete = window.confirm(
+                  "Are you sure you want to unenroll from this course?"
+                );
+
+                if (!confirmDelete) return;
+
+                deleteCourse(index);
+
+                alert(`You have been unenrolled from ${c.code}`);
+            }}>
               Unenroll
             </button>
           </div>
