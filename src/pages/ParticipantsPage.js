@@ -2,10 +2,12 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import TeacherSidebar from "../components/TeacherSidebar";
 import SecondaryTNavbar from "../components/SecondaryTNavbar";
+import { useTheme } from '../context/ThemeContext';
 import '../pagesCSS/CourseManagement.css';
 
 const ParticipantsPage = ({ courses }) => {
   const { id } = useParams();
+  const { theme } = useTheme();
   const [courseData, setCourseData] = useState({ code: "", name: "", term: "" });
   const [students, setStudents] = useState([]);
   const [teachers, setTeachers] = useState([]);
@@ -48,7 +50,7 @@ const ParticipantsPage = ({ courses }) => {
   };
 
   const thStyle = {
-    backgroundColor: "#590016",
+    backgroundColor: theme === 'dark' ? '#444' : '#590016',
     color: "white",
     padding: "10px 14px",
     textAlign: "left",
@@ -58,11 +60,11 @@ const ParticipantsPage = ({ courses }) => {
   const tdStyle = {
     padding: "10px 14px",
     borderBottom: "1px solid #eee",
-    color: "#333"
+    color: theme === 'dark' ? '#fff' : '#333'
   };
 
   const trHoverStyle = {
-    backgroundColor: "#f9f9f9"
+    backgroundColor: theme === 'dark' ? '#555' : "#f9f9f9"
   };
 
   const badgeStyle = (type) => ({
@@ -71,12 +73,12 @@ const ParticipantsPage = ({ courses }) => {
     borderRadius: "50px",
     fontSize: "12px",
     fontWeight: "bold",
-    backgroundColor: type === "Teacher" ? "#590016" : "#A9445A",
+    backgroundColor: type === "Teacher" ? (theme === 'dark' ? '#666' : '#590016') : (theme === 'dark' ? '#777' : '#A9445A'),
     color: "white"
   });
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
+    <div className={`theme-${theme}`} style={{ display: "flex", minHeight: "100vh" }}>
       <TeacherSidebar courses={courses} />
       <main style={{ flex: 1 }}>
         <h1>Course Manager</h1>
