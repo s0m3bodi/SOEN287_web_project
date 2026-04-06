@@ -30,8 +30,7 @@ function StudentCourseManagement() {
       <div className="course-section-card">
         <h3>Course Overview</h3>
         <p><b>Term:</b> {course.term}</p>
-        <p><b>Instructor:</b> {course.instructor}</p>
-        <p><b>Email:</b> <a href={`mailto:${course.instructorEmail}`}>{course.instructorEmail}</a></p>
+       
       </div>
 
       {/* Announcements */}
