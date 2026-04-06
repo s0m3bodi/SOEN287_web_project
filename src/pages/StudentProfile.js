@@ -8,7 +8,7 @@ import '../pagesCSS/StudentCSS/Calendar.css';
 import { useCoursesContext } from '../context/CoursesContext';
 import { useState } from 'react';
 import { useEffect } from 'react'; 
-import StudentCourseManagement from '../pages/StudentCourseManagement';
+import { useNavigate } from "react-router-dom";
 // helper to get current student ID
 function getStudentId() {
   return localStorage.getItem("userId") || "Unknown";
@@ -856,16 +856,11 @@ function StudentProfile() {
           boxSizing: "border-box"
         }}
       >
-        <Routes>
-          <Route index element={<Dashboard />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="profile" element={<Profile />} />      
-          <Route path="assessments" element={<Assessments />} />
-          <Route path="courses" element={<Courses />} />
-          <Route path="courses/:id" element={<StudentCourseManagement />} />
-          <Route path="progress" element={<Progress />} />
-          <Route path="Calendar" element={<Calendar />} />
-        </Routes>
+        <Routes> 
+          <Route index element={<Dashboard />} /> 
+          <Route path="dashboard" element={<Dashboard />} /> 
+          <Route path="profile" element={<Profile />} /> 
+          <Route path="assessments" element={<Assessments />} /> <Route path="courses" element={<Courses enrolledCourses={enrolledCourses} setEnrolledCourses={updateEnrolledCourses} />} /> <Route path="courses/:id" element={<StudentCourseManagement />} /> <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} />} /> <Route path="progress" element={<Progress />} /> </Routes>
       </div>
     </div>
   );
