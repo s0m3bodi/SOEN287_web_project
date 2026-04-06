@@ -163,6 +163,39 @@ button:active {
     border: 1px solid #666;
 }
 
+.theme-dark .student-progress-box {
+    background-color: #444;
+    border: 1px solid #666;
+}
+
+.theme-dark .student-progress-box h2 {
+    color: #ccc;
+}
+
+.theme-dark .stat-number {
+    color: #ccc;
+}
+
+.theme-dark .stat-label {
+    color: #999;
+}
+
+.theme-dark .student-item {
+    border-bottom: 1px solid #555;
+}
+
+.theme-dark .student-name {
+    color: #fff;
+}
+
+.theme-dark .student-id {
+    color: #ccc;
+}
+
+.theme-dark .student-email {
+    color: #ccc;
+}
+
 .theme-toggle-btn {
     background-color: #590016;
     color: white;
@@ -170,4 +203,68 @@ button:active {
     padding: 8px 14px;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.student-progress-box {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.student-progress-box h2 {
+    color: #590016;
+    margin-bottom: 15px;
+}
+
+.progress-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    color: #590016;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #666;
+}
+
+.students-list {
+    margin-top: 15px;
+}
+
+.student-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.student-item:last-child {
+    border-bottom: none;
+}
+
+.student-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.student-id {
+    color: #666;
+    font-size: 12px;
+}
+
+.student-email {
+    color: #666;
+    font-size: 12px;
 }
