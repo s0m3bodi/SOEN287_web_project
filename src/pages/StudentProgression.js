@@ -4,10 +4,12 @@ import TeacherSidebar from '../components/TeacherSidebar';
 import SecondaryTNavbar from '../components/SecondaryTNavbar'
 import { PieChart, Pie, Tooltip, Cell, Legend } from 'recharts';
 import Assessment from '../components/Assessment';
+import { useTheme } from '../context/ThemeContext';
 import '../pagesCSS/ManageAssessments.css'
 
 const StudentProgress = ({ courses }) => {
     const { id } = useParams();
+    const { theme } = useTheme();
 
     const [course, setCourse] = useState(null);
     const [activeIndex, setActiveIndex] = useState(null);
@@ -27,7 +29,7 @@ const StudentProgress = ({ courses }) => {
     const COLORS = ['#008000', '#FF6347'];
 
     return (
-        <div className="AssessPage"> {/*This page is very similar to the assessments page, so it will use the same css page*/}
+        <div className={`theme-${theme} AssessPage`}> {/*This page is very similar to the assessments page, so it will use the same css page*/}
             <TeacherSidebar courses={courses} style={{margin:0}} />
             <main className="mainAssessPage" style={{flex: 1}}>
                 
