@@ -9,7 +9,7 @@ import StudentProgress from "./pages/StudentProgression";
 import { courses as hardcodedCourses } from "./components/Data";
 import { CoursesContext } from "./context/CoursesContext";
 import { ThemeProvider } from './context/ThemeContext';
-
+import ParticipantsPage from "./pages/ParticipantsPage"
 // Protected route for role-based access
 const ProtectedRoute = ({ role, children }) => {
     const auth = localStorage.getItem('authUser');
@@ -90,6 +90,11 @@ function App() {
                                     courses={courses}
                                     onUpdateCourse={updateCourse}
                                 />
+                            </ProtectedRoute>
+                        }/>
+                        <Route path="/course/:id/participants" element={
+                            <ProtectedRoute role="teacher">
+                              <ParticipantsPage courses={courses} />
                             </ProtectedRoute>
                         }/>
                     </Routes>
