@@ -20,6 +20,11 @@ const SecondaryTNavbar= ({ courseId }) => {
                     className={({isActive}) => isActive ? "active" : ""}>
                     Student progress
                 </NavLink>
+                <NavLink
+                to={`/course/${courseId}/participants`}
+                className={({ isActive }) => isActive ? "active" : ""}>
+                Participants
+                 </NavLink>
         </div> 
     );
 }
