@@ -1,12 +1,14 @@
 // StudentCourseManagement.jsx
 import { useParams, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { useTheme } from '../context/ThemeContext';
 import "../pagesCSS/StudentCSS/StudentProfile.css"; // reuse your CSS
 
 function StudentCourseManagement() {
   const { id } = useParams();
   const location = useLocation();
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const { theme } = useTheme();
 
   const teacherCourses = JSON.parse(localStorage.getItem("teacherCourses") || "[]");
   const course = location.state?.course || teacherCourses.find(c => c.id === Number(id));
@@ -22,7 +24,7 @@ function StudentCourseManagement() {
   }
 
   return (
-    <div className="details-section">
+    <div className={`theme-${theme} details-section`}>
     <h2>{course.code} : {course.name}</h2>
       {/* Course Overview */}
       <div className="course-section-card">
