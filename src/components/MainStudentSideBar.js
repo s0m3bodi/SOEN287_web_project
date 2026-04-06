@@ -43,7 +43,8 @@ function MainStudentSideBar() {
                     marginTop: "20px",
                     padding: "10px 20px",
                     fontSize: "16px",
-                    cursor: "pointer"
+                    cursor: "pointer",
+                    border: "1px solid black"
                 }}
             
             >
