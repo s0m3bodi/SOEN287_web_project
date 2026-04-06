@@ -25,21 +25,6 @@ const TeacherPage = ({ courses, onUpdateCourse }) => { //home page with hardcode
   const [form, setForm] = useState({});
 const [unsaved, setUnsaved] = useState(false);
 
-  // Calculate student progress stats
-  const registeredStudents = JSON.parse(localStorage.getItem("registeredStudents") || "[]");
-  const hardcodedStudent = {
-    id: "STU-40212345",
-    firstName: "Veft",
-    lastName: "Soen",
-    email: "veft@email.com"
-  };
-  const allStudents = [hardcodedStudent, ...registeredStudents];
-  const totalStudents = allStudents.length;
-  const totalAssessments = courses.reduce((sum, course) => sum + (course.assessments ? course.assessments.length : 0), 0);
-  const completedAssessments = courses.reduce((sum, course) => 
-    sum + (course.assessments ? course.assessments.reduce((cSum, a) => cSum + (a.completed || 0), 0) : 0), 0);
-  const averageCompletion = totalAssessments > 0 ? Math.round((completedAssessments / (totalAssessments * totalStudents)) * 100) : 0;
-
 
     useEffect(() => {
         const stored = localStorage.getItem("currentTeacher");
@@ -118,7 +103,11 @@ const [unsaved, setUnsaved] = useState(false);
     };
 
     const addCourse = () => { //adds new course to array
-        const newId = courses.length > 0 ? Math.max(...courses.map(course => course.id)) + 1 : 1; //resizes array to fit 1 more 
+      const validIds = courses
+        .map(c => c.id)
+        .filter(id => typeof id === 'number' && !isNaN(id));
+
+      const newId = validIds.length > 0 ? Math.max(...validIds) + 1 : 1; //resizes array to fit 1 more 
         const courseToAdd = { id: newId, ...newCourse, isActive: true, totalStudents: 300 }; //creates new array object then copies new course in it, sets active to true and total students to 300 by default
     
         onUpdateCourse(courseToAdd); //updates everything
@@ -180,35 +169,6 @@ const [unsaved, setUnsaved] = useState(false);
               <button className="teacher-edit-btn" onClick={handleEdit}>Edit Profile</button>
             </>
           )}
-        </div>
-
-        {/* Student Progress Overview */}
-        <div className="student-progress-box">
-          <h2>Student Progress Overview</h2>
-          <div className="progress-stats">
-            <div className="stat">
-              <span className="stat-number">{totalStudents}</span>
-              <span className="stat-label">Total Students</span>
-            </div>
-            <div className="stat">
-              <span className="stat-number">{totalAssessments}</span>
-              <span className="stat-label">Total Assessments</span>
-            </div>
-            <div className="stat">
-              <span className="stat-number">{averageCompletion}%</span>
-              <span className="stat-label">Average Completion</span>
-            </div>
-          </div>
-          <h3>Registered Students</h3>
-          <div className="students-list">
-            {allStudents.map(student => (
-              <div key={student.id} className="student-item">
-                <span className="student-name">{student.firstName} {student.lastName}</span>
-                <span className="student-id">{student.id}</span>
-                <span className="student-email">{student.email}</span>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Add course button/modal */}
