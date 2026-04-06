@@ -7,7 +7,6 @@ import '../pagesCSS/StudentCSS/Calendar.css';
 import { useTheme } from '../context/ThemeContext';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { calculateOverallGPA, calculateCourseGPA } from '../utils/gpaCalculator';
 import { useCoursesContext } from '../context/CoursesContext';
 // helper to get current student ID
 function getStudentId() {
@@ -75,6 +74,11 @@ function Dashboard() {
   const [studentName, setStudentName] = useState("");
   const [courses, setCourses] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
+  const [dashboardMetrics, setDashboardMetrics] = useState({
+    overallAverage: 0,
+    overallGPA: "0.00",
+    courseGPAs: {}
+  });
 
   useEffect(() => {
     const stored = localStorage.getItem("currentStudent");
@@ -91,12 +95,9 @@ function Dashboard() {
     ));
   }, []);
 
-  const overall =
-    courses.length > 0
-      ? courses.reduce((sum, course) => sum + course.average, 0) / courses.length
-      : 0;
-
-  const overallGPA = calculateOverallGPA(courses);
+  const overall = dashboardMetrics.overallAverage;
+  const overallGPA = dashboardMetrics.overallGPA;
+  const courseGPAs = dashboardMetrics.courseGPAs;
 
   const sectionStyle = {
     backgroundColor: "#f5f5f5",
@@ -152,6 +153,41 @@ function Dashboard() {
     );
   };
 
+  useEffect(() => {
+    if (courses.length === 0) {
+      setDashboardMetrics({ overallAverage: 0, overallGPA: "0.00", courseGPAs: {} });
+      return;
+    }
+
+    const fetchGPAData = async () => {
+      try {
+        const response = await fetch('/api/compute-gpa', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ courses })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to compute GPA data');
+        }
+
+        const data = await response.json();
+        setDashboardMetrics({
+          overallAverage: data.overallAverage,
+          overallGPA: data.overallGPA,
+          courseGPAs: data.courseGPAs || {}
+        });
+      } catch (error) {
+        console.error(error);
+        setDashboardMetrics({ overallAverage: 0, overallGPA: "0.00", courseGPAs: {} });
+      }
+    };
+
+    fetchGPAData();
+  }, [courses]);
+
   return (
     <div className='details-section' >
       <h2>Hi {studentName} 👋</h2>
@@ -175,15 +211,15 @@ function Dashboard() {
           {courses.length === 0 ? (
             <p>No courses enrolled.</p>
           ) : (
-           courses.map((course) => {
-             const courseGPA = calculateCourseGPA(course.average);
-             return (
-              <p key={course.id}>
-                {course.name} - {course.average}% | GPA: {courseGPA.gpaPoint} ({courseGPA.letterGrade})
-              </p>
-            );
-           })
-        )}
+            courses.map((course) => {
+              const courseGPA = courseGPAs[course.id] || { gpaPoint: "0.00", letterGrade: "N/A" };
+              return (
+                <p key={course.id}>
+                  {course.name} - {course.average}% | GPA: {courseGPA.gpaPoint} ({courseGPA.letterGrade})
+                </p>
+              );
+            })
+          )}
         </div>
         </div>
         <div className='dashboard-card'>
@@ -524,20 +560,32 @@ function Assessments() {
 
   useEffect(() => {
     if (loaded) {
-    saveStudentData("assessments", assessments);
-    // recalculate average per course and sync to dashboard_courses
+      saveStudentData("assessments", assessments);
       const dashboardCourses = loadStudentData("dashboard_courses");
-      const updatedDashboard = dashboardCourses.map(dc => {
-        const courseAssessments = assessments.filter(
-          a => a.course === dc.name && a.earned !== null
-        );
-        if (courseAssessments.length === 0) return dc;
-        const avg = courseAssessments.reduce(
-          (sum, a) => sum + (a.earned / a.total) * 100, 0
-        ) / courseAssessments.length;
-        return { ...dc, average: Math.round(avg) };
-      });
-      saveStudentData("dashboard_courses", updatedDashboard);
+
+      const syncDashboardAverages = async () => {
+        try {
+          const response = await fetch('/api/compute-dashboard', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ dashboardCourses, assessments })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to compute dashboard averages');
+          }
+
+          const data = await response.json();
+          saveStudentData("dashboard_courses", data.dashboardCourses || dashboardCourses);
+        } catch (error) {
+          console.error(error);
+          saveStudentData("dashboard_courses", dashboardCourses);
+        }
+      };
+
+      syncDashboardAverages();
     }
   }, [assessments, loaded]);
 
