@@ -5,10 +5,8 @@ import defaultPP from "../pages/defaultPP.jpeg"
 import '../pagesCSS/StudentCSS/StudentProfile.css';
 import '../pagesCSS/StudentCSS/Calendar.css';
 // import { useTheme } from '../context/ThemeContext';
-import { useCoursesContext } from '../context/CoursesContext';
 import { useState } from 'react';
-import { useEffect } from 'react'; 
-import StudentCourseManagement from '../pages/StudentCourseManagement';
+import { useEffect } from 'react';
 // helper to get current student ID
 function getStudentId() {
   return localStorage.getItem("userId") || "Unknown";
