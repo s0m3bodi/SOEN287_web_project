@@ -393,7 +393,8 @@ function Courses(){
       term: teacherCourse.term
     };
     setCourses([...courses, newEnrolled]);
-
+    alert(`Successfully enrolled in ${teacherCourse.code} - ${teacherCourse.name}`);
+    
     // pre-populate assessments from the teacher course
     if (teacherCourse.assessments && teacherCourse.assessments.length > 0) {
       const existingAssessments = loadStudentData("assessments");
