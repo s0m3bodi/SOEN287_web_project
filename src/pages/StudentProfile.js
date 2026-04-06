@@ -536,8 +536,18 @@ function Assessments() {
   }, [assessments, loaded]);
 
   function handleDelete(id) {
-    setAssessments(assessments.filter((item) => item.id !== id));
-  }
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this assessment?"
+  );
+
+  if (!confirmDelete) return;
+
+  const deletedItem = assessments.find(item => item.id === id);
+
+  setAssessments(assessments.filter((item) => item.id !== id));
+
+  alert(`Deleted: ${deletedItem?.title || "Assessment"}`);
+}
 
   function handleEdit(item) {
     setEditingId(item.id);
@@ -545,24 +555,34 @@ function Assessments() {
   }
 
   function handleSave(id) {
-    const updated = assessments.map((item) => {
-      if (item.id === id) {
-        const newEarned = editedEarned === "" ? null : Number(editedEarned);
+  const confirmSave = window.confirm(
+    "Are you sure you want to save these changes?"
+  );
 
-        return {
-          ...item,
-          earned: newEarned,
-          status: editedEarned !== "" ? "Completed" : "Pending"
-        };
-      }
-      return item;
-    });
+  if (!confirmSave) return;
 
-    setAssessments(updated);
-    setEditingId(null);
-    setEditedEarned("");
-  }
+  const updated = assessments.map((item) => {
+    if (item.id === id) {
+      const newEarned = editedEarned === "" ? null : Number(editedEarned);
 
+      return {
+        ...item,
+        earned: newEarned,
+        status: editedEarned !== "" ? "Completed" : "Pending"
+      };
+    }
+    return item;
+  });
+
+  setAssessments(updated);
+
+  const editedItem = assessments.find(item => item.id === id);
+
+  alert(`Updated: ${editedItem?.title || "Assessment"}`);
+
+  setEditingId(null);
+  setEditedEarned("");
+}
   const grouped = assessments.reduce((acc, item) => {
     if (!acc[item.course]) {
       acc[item.course] = [];
