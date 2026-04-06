@@ -21,7 +21,7 @@ const ManageAssessments = ({ courses, onUpdateCourse }) => {
         if (foundCourse) {
             setCourse(foundCourse);
             const assessmentsList = (foundCourse.assessments || []).map(e =>
-                new Assessment(e.type, e.name || "", e.deadline || "", e.weight || 0)
+                new Assessment(e.type, e.name || "", e.deadline || "", e.weight || 0, e.isActive !== undefined ? e.isActive : true, e.completed || 0)
             );
             setAssessments(assessmentsList); // Creates an array containing all assessments with their attributes
         }
@@ -68,7 +68,7 @@ const ManageAssessments = ({ courses, onUpdateCourse }) => {
             if (i !== index){
                 return a;
             }
-            return new Assessment(a.type, a.name, a.deadline, a.weight, !a.isActive);
+            return new Assessment(a.type, a.name, a.deadline, a.weight, !a.isActive, a.completed);
         });
         setAssessments(updatedAssessments);
     };

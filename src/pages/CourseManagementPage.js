@@ -50,25 +50,6 @@ const CourseManagementPage = ({ courses, onUpdateCourse, onDeleteCourse }) => { 
         setCourseData({ ...courseData, isActive: !courseData.isActive });
     };
 
-    const addAssignment = () => { //to add assessment
-        const newAssignment = {  //the components later want to change so it's automatic the completed 
-            type: "", 
-            weight: 0, 
-            completed: 0 
-        };
-        setCourseData({ //puts in the array
-            ...courseData,
-            assessments: [...(courseData.assessments || []), newAssignment]
-        });
-    };
-
-    const handleAssignmentChange = (index, e) => { //updates the lists to include new/edited assessments
-        const { name, value } = e.target;
-        const updatedAssessments = [...(courseData.assessments || [])];
-        updatedAssessments[index][name] = name === "weight" || name === "completed" ? Number(value) : value; // To change string inputs into numerical inputs incase of calculations later on
-        setCourseData({ ...courseData, assessments: updatedAssessments });
-    };
-
     const handleSaveChanges = () => { //saves changes and goes back to teacher homepage
         onUpdateCourse(courseData);
         setIsEditing(false);
@@ -133,52 +114,7 @@ const CourseManagementPage = ({ courses, onUpdateCourse, onDeleteCourse }) => { 
                     </button>
                 </div>
                 
-                <div className="assignments">
-                    <h2>Assessments</h2> {/*prints assessments as boxes that can be edited*/}
-                    
-                    {/*Column Labels*/}
-                    <div className="assessmentHeaders">
-                        <span className="boxForType">Type</span>
-                        <span className="boxForWeight">Weight</span>
-                        <span className="boxForCompletionNumber">Completion</span>
-                    </div>
-                    
-                    {/*Assessment inputs*/}
-                    {courseData.assessments.map((assessment, index) => (
-                        <div key={index} className="assessmentRow">
-                            <input 
-                                className="boxForType"
-                                name="type" 
-                                placeholder="Type" 
-                                value={assessment.type} 
-                                onChange={(e) => handleAssignmentChange(index, e)} 
-                                disabled={!isEditing}
-                            />
-                        {/*want to change type to a better one so doesnt go one by one same for completed*/}
-                            <input 
-                                className="boxForWeight"
-                                name="weight" 
-                                type="number" 
-                                placeholder="Weight" 
-                                value={assessment.weight} 
-                                onChange={(e) => handleAssignmentChange(index, e)} 
-                                disabled={!isEditing}
-                            />
-                            {/*want to change in the future so its automatic*/}
-                            <input 
-                                className="boxForCompletionNumber"
-                                name="completed" 
-                                type="number" 
-                                placeholder="Completed" 
-                                value={assessment.completed} 
-                                onChange={(e) => handleAssignmentChange(index, e)} 
-                                disabled={!isEditing}
-                            />
-                        </div>
-                    ))}
-                    <button onClick={addAssignment} disabled={!isEditing}>Add Assessment</button> {/*button to add an assignment*/}
-                    
-                </div>
+                
                 <div className="end-buttons">
                     {/*Button to delete course, asks for confirmation */}
                     <button onClick={() => {

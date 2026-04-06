@@ -16,7 +16,7 @@ const StudentProgress = ({ courses }) => {
         const foundCourse = courses.find(e => e.id === Number(id));
         if (foundCourse) {
             const updatedAssessments = (foundCourse.assessments || []).map(a =>
-                new Assessment(a.type, a.name || "", a.deadline || "", a.weight || 0, a.completed || 0, a.isActive !== false)
+                new Assessment(a.type, a.name || "", a.deadline || "", a.weight || 0, a.isActive !== false, a.completed || 0)
             );
         setCourse({...foundCourse, assessments: updatedAssessments});
         }
