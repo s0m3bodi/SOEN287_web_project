@@ -3,11 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TeacherSidebar from '../components/TeacherSidebar';
 import SecondaryTNavbar from '../components/SecondaryTNavbar';
 import Assessment from '../components/Assessment';
+import { useTheme } from '../context/ThemeContext';
 import '../pagesCSS/ManageAssessments.css';
 
 const ManageAssessments = ({ courses, onUpdateCourse }) => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { theme } = useTheme();
 
     // Give initial values
     const [course, setCourse] = useState(null);
@@ -82,7 +84,7 @@ const ManageAssessments = ({ courses, onUpdateCourse }) => {
 
     if (!course) return <div>Course not found</div> // Prevent the site from breaking
     return (
-        <div className="AssessPage">
+        <div className={`theme-${theme} AssessPage`}>
             <TeacherSidebar courses={courses} style={{margin: 0}}/>
             <main className="mainAssessPage" style={{ flex: 1}}>
                 
