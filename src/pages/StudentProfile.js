@@ -80,8 +80,13 @@ function Dashboard() {
       const profile = JSON.parse(stored);
       setStudentName(profile.firstName);
     }
-    setCourses(loadStudentData("dashboard_courses"));
-    setUpcoming(loadStudentData("upcoming"));
+    const dashboardCourses = loadStudentData("dashboard_courses");
+    setCourses(dashboardCourses);
+    const enrolledCourseCodes = dashboardCourses.map(c => c.name);
+    const allAssessments = loadStudentData("assessments");
+    setUpcoming(allAssessments.filter(
+      a => a.status === "Pending" && enrolledCourseCodes.includes(a.course)
+    ));
   }, []);
 
   const overall =
@@ -177,7 +182,7 @@ function Dashboard() {
           ) : (
             upcoming.map((item) => (
               <p key={item.id}>
-                {item.title} ({item.course}) - Due {item.due}
+                {item.title} ({item.course})
               </p>
             ))
           )}
