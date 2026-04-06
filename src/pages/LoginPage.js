@@ -103,7 +103,7 @@ const registeredTeachers = JSON.parse(localStorage.getItem("registeredTeachers")
     else{
       if (username === studentInfo.username && password === studentInfo.password) { //checks if password right
        localStorage.setItem("userId", studentInfo.id);
-       localStorage.setItem("userRole", "student");
+       localStorage.setItem("authUser", "student");
        const existingStudent = localStorage.getItem("currentStudent");
   if (existingStudent) {
     const parsed = JSON.parse(existingStudent);

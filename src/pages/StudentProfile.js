@@ -1,5 +1,6 @@
 import { Routes, Route} from 'react-router-dom';
 import MainStudentSideBar from '../components/MainStudentSideBar';
+import StudentCourseManagement from './StudentCourseManagement';
 import defaultPP from "../pages/defaultPP.jpeg"
 import '../pagesCSS/StudentCSS/StudentProfile.css';
 import '../pagesCSS/StudentCSS/Calendar.css';
@@ -7,7 +8,6 @@ import '../pagesCSS/StudentCSS/Calendar.css';
 import { useCoursesContext } from '../context/CoursesContext';
 import { useState } from 'react';
 import { useEffect } from 'react'; 
-import { useNavigate } from "react-router-dom";
 import StudentCourseManagement from '../pages/StudentCourseManagement';
 // helper to get current student ID
 function getStudentId() {
@@ -861,9 +861,8 @@ function StudentProfile() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />      
           <Route path="assessments" element={<Assessments />} />
-          <Route path="courses" element={<Courses enrolledCourses={enrolledCourses} setEnrolledCourses={updateEnrolledCourses} />} />
+          <Route path="courses" element={<Courses />} />
           <Route path="courses/:id" element={<StudentCourseManagement />} />
-          <Route path="assessments" element={<Assessments enrolledCourses={enrolledCourses} />} />
           <Route path="progress" element={<Progress />} />
           <Route path="Calendar" element={<Calendar />} />
         </Routes>
